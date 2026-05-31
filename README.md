@@ -11,3 +11,4 @@ If you have any question drop it in Issues(everyone knows btw
 # About me
 A kid, 13, knows some of java, trying to learn cpp.
 If you have any better piece of code for performance tell me    bcs uhhhhh idk im not smart dude.
+btw english is not my first language lol
