@@ -16,6 +16,8 @@ uhhhhhh this project will take SOOO long to actually finish or release that uhh.
 
 This name is by AI bru bcs im trash at giving things a name
 
+why GitHub even need to auto push a action EVERYTIME when i push a new update which i will do it EVERY 5 MIN
+
 # About me
 A kid :( , 13, knows some of Java, trying to learn cpp.
 
