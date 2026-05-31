@@ -4,7 +4,7 @@ Vren is ready to be a software thats free-opensource-fast-light-replacement for 
 # Direction
 Make a format that can store millions of data with any type of variable
 
-Might have multiple branches like Office, Anti Virus, and Browser in the future but not now(DONT even THINK about it for now).
+Might have multiple branches like Office, Anti Virus, and Browser in the future but not now(DONT even THINK about it for now, having big dreams is not that.. bad?).
 
 # Tips
 If you have any question drop it in Issues(everyone knows btw
