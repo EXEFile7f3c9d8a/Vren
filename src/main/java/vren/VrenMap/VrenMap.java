@@ -8,6 +8,7 @@ import static vren.VrenDevTools.VrenDevTools.toBinary;
 import static vren.VrenDevTools.VrenDevTools.toHex;
 
 public class VrenMap {
+    private static final String BLOB = "--------------------------------------------------";
     public static final byte BINARY_IN_REPORT_TRUE = 0;
     public static final byte BINARY_IN_REPORT_FALSE = 1;
     public static final byte HEX_IN_REPORT_TRUE = 2;
@@ -124,10 +125,10 @@ public class VrenMap {
                     .append(System.lineSeparator())
                     .append("           └► ").append(toHex(currentValue))
                     .append(System.lineSeparator())
-                    .append("--------------------------------------------------")
+                    .append(BLOB)
                     .append(System.lineSeparator());
         }
-        sb.delete(sb.length() - (50 + System.lineSeparator().length()), sb.length());
+        sb.delete(sb.length() - (BLOB.length() + System.lineSeparator().length()), sb.length());
         return sb.toString();
     }
     public String getReport(){//not yet
