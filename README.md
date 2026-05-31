@@ -9,5 +9,5 @@ Might have multiple branches like Office, Anti Virus, and Browser in the future 
 If you have any question drop it in Issues(everyone knows btw
 
 # About me
-A kid, 13, knows a some of java, trying to learn cpp.
+A kid, 13, knows some of java, trying to learn cpp.
 If you have any better piece of code for performance tell me    bcs uhhhhh idk im not smart dude.
