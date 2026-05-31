@@ -6,6 +6,8 @@ Make a format that can store millions of data with any type of variable
 
 Might have multiple branches like Office, Anti Virus, and Browser in the future but not now(DONT even THINK about it for now, having big dreams is not that.. bad?).
 
+if u got any ideas TELL MEEEA
+
 # Tips
 If you have any question drop it in Issues(everyone knows btw
 
