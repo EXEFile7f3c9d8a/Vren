@@ -4,7 +4,7 @@ import vren.VrenDevTools.VrenDevTools;
 
 import java.util.*;
 
-import static vren.VrenDevTools.VrenDevTools.toBinaryCode;
+import static vren.VrenDevTools.VrenDevTools.toBinary;
 import static vren.VrenDevTools.VrenDevTools.toHex;
 
 public class VrenMap {
@@ -116,7 +116,7 @@ public class VrenMap {
                     .append(System.lineSeparator())
                     .append("       ├──Value in Binary Code")
                     .append(System.lineSeparator())
-                    .append("       │   └► ").append(Arrays.toString(toBinaryCode(currentValue)))
+                    .append("       │   └► ").append(Arrays.toString(toBinary(currentValue)))
                     .append(System.lineSeparator())
                     .append("       │")
                     .append(System.lineSeparator())

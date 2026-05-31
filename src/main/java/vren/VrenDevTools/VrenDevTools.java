@@ -5,7 +5,7 @@ import java.io.IOException;
 import java.io.ObjectOutputStream;
 
 public class VrenDevTools {
-    public static byte[] toBinaryCode(Object var){
+    public static byte[] toBinary(Object var){
         if(var == null) return null;
         try{
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
@@ -27,7 +27,7 @@ public class VrenDevTools {
     }
     public static String toHex(Object var){
         if(var == null) return null;
-        return binaryToHex(toBinaryCode(var));
+        return binaryToHex(toBinary(var));
     }
     public static String getClass(Object obj){
         if(obj == null) return null;
