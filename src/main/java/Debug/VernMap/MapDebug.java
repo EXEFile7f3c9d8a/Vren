@@ -12,5 +12,4 @@ public class MapDebug {
         obj.addTag("Value", null, new Object[]{"1234567890qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM~!@#$%^&*()_+中文字符测试"});
         System.out.println(obj.getTag(obj));
     }
-
 }
