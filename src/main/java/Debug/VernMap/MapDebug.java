@@ -9,7 +9,8 @@ public class MapDebug {
         System.out.println(obj.valueCount(obj));
         System.out.println("0".hashCode());
         System.out.println(obj);
-        obj.addTag("Value", null, new Object[]{"1234567890qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM~!@#$%^&*()_+中文字符测试"});
+        obj.addTag("Value", null,
+                new Object[]{"VrenCoreTest_1234567890_ABCDEFGHIJKLMNOPQRSTUVWXYZ_abcdefghijklmnopqrstuvwxyz_~!@#$%^&*()_+{}|:<>?-=[]\\\\;',./\""});
         System.out.println(obj.getTag(obj));
     }
 }
