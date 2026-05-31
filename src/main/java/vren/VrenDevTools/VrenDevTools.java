@@ -1,0 +1,36 @@
+package vren.VrenDevTools;
+
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.ObjectOutputStream;
+
+public class VrenDevTools {
+    public static byte[] toBinaryCode(Object var){
+        if(var == null) return null;
+        try{
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            ObjectOutputStream oos = new ObjectOutputStream(baos);
+            oos.writeObject(var);
+            oos.close();
+            return baos.toByteArray();
+        }catch (IOException e) {
+            return null;
+        }
+    }
+    public static String binaryToHex(byte[] var){
+        if(var == null) return null;
+        StringBuilder sb = new StringBuilder();
+        for(int i = 0; i < var.length; i++){
+            sb.append(String.format("%02x", var[i]));
+        }
+        return sb.toString();
+    }
+    public static String toHex(Object var){
+        if(var == null) return null;
+        return binaryToHex(toBinaryCode(var));
+    }
+    public static String getClass(Object obj){
+        if(obj == null) return null;
+        return obj.getClass().getName();
+    }
+}

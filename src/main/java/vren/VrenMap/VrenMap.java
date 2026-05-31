@@ -1,16 +1,23 @@
 package vren.VrenMap;
 
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.ObjectOutputStream;
+import vren.VrenDevTools.VrenDevTools;
 import java.util.*;
 
+import static vren.VrenDevTools.VrenDevTools.toBinaryCode;
+import static vren.VrenDevTools.VrenDevTools.toHex;
+
 public class VrenMap {
+    public static final byte BINARY_IN_REPORT_TRUE = 0;
+    public static final byte BINARY_IN_REPORT_FALSE = 1;
+    public static final byte HEX_IN_REPORT_TRUE = 2;
+    public static final byte HEX_IN_REPORT_FALSE = 3;
+    private static final short SETTINGS_COUNT = 4;
+    private final int[] SETTING_LIST = new int[30];
     private final HashMap<Object, Object> tagStorage = new HashMap<>();
-    private static class Tags {
+    private static final class Tags {
         public HashMap<Object, Object> Value = new HashMap<>();
         public Object LockTag = null;
-        public Tags(Object tag, Object[] valueName, Object... value){
+        public Tags(Object tag, Object[] valueName, Object[] value){
             if(tag == null)return;
             if(valueName == null && value != null){
                 for(int i = 0; i < value.length; i++){
@@ -29,9 +36,28 @@ public class VrenMap {
                 this.LockTag = tag;
             }
         }
-        public void add(Object... Value){
-
+        public void add(Object[] valueName, Object[] value){
+            if(valueName == null && value != null){
+                for(int i = 0; i < value.length; i++){
+                    int temp;
+                    if(value[i]!=null) temp = value[i].hashCode();
+                    else temp = 0;
+                    this.Value.put(new Object[]{null, temp}, value[i]);
+                }
+            }else if(value == null){
+                return;
+            }else{
+                for(int i = 0; i < value.length; i++){
+                    this.Value.put(new Object[]{valueName[i], value[i].hashCode()}, value[i]);
+                }
+            }
         }
+    }
+    public VrenMap(){
+        for(int i = 0; i < SETTINGS_COUNT; i++)SETTING_LIST[i] = i;
+    }
+    public void Setting(byte set){//not yet
+
     }
     public void addTag(Object tag){
         addTag(tag, null, null);
@@ -43,19 +69,22 @@ public class VrenMap {
         Object temp = new Tags(tag, valueName, value);
         tagStorage.put(tag, temp);
     }
-    public void addValue(Object tag, Object... value){
-
+    public void addValue(Object tag, Object[] valueName, Object[] value){
+        Tags tags = (Tags) tagStorage.get(tag);
+        tags.add(valueName, value);
     }
-    public void setValue(){
-
+    public void setValue(){//not yet
     }
-    public Object getValueOf(Object tag, String hash){
+    public Object getValueOf(Object tag){//not yet
+        return getValueOf(tag, null);
+    }
+    public Object getValueOf(Object tag, String hash){//not yet
         return null;
     }
-    public Object getTag(Object tag){
+    public Object getTag(Object tag){//not yet
         return ((Tags)tagStorage.get(tag)).Value;
     }
-    public Object getTagFormatted(Object tag){
+    public Object getTagFormatted(Object tag){//not yet
         StringBuilder sb = new StringBuilder();
         for(int i = 0; i<2; i++){
 
@@ -64,65 +93,61 @@ public class VrenMap {
     }
     public String getTagReport(Object tag){
         if(tagStorage.get(tag) == null)return null;
-        Map<Object, Object> ValueCopy = ((Tags)tagStorage.get(tag)).Value;
-        if(ValueCopy.isEmpty()) return null;
-        List<Object> keysetArray = new ArrayList<>(ValueCopy.keySet());
-        List<Map.Entry<Object, Object>> entries = new ArrayList<>(ValueCopy.entrySet());
+        Map<Object, Object> tagCopy = ((Tags)tagStorage.get(tag)).Value;
+        if(tagCopy.isEmpty()) return null;
+        List<Map.Entry<Object, Object>> entries = new ArrayList<>(tagCopy.entrySet());
         StringBuilder sb = new StringBuilder();
 
         sb.append("====================Tag Report====================");
         sb.append(System.lineSeparator());
-        for(int i = 0; i < ValueCopy.size(); i++){
+        for(int i = 0; i < tagCopy.size(); i++){
             Map.Entry<Object, Object> entry = entries.get(i);
-            Object[] currentKeyset = (Object[]) entry.getKey();
+            Object[] currentKey = (Object[]) entry.getKey();
             Object currentValue = entry.getValue();
-            Class<?> currentValueClass;
-            String currentClassName;
-            if(currentValue != null) {
-                currentValueClass = currentValue.getClass();
-                currentClassName = currentValueClass.getName();
-            }else currentClassName = "null";
-            sb
-                    .append("    Current Value Name ─► ").append(currentKeyset[0])
+            sb      .append("    Current Key Name ─► ").append(currentKey[0])
                     .append(System.lineSeparator())
-                    .append("    Current Value Hash ─► ").append(currentKeyset[1])
+                    .append("    Current Key Hash ─► ").append(currentKey[1])
+                    .append("     Key in Hex ")
+                    .append(System.lineSeparator())
+                    .append("       │   └►").append(toHex(currentKey[0]))
                     .append(System.lineSeparator())
                     .append("     Value")
                     .append(System.lineSeparator())
-                    .append("       ├──Variable Class Name ─► ").append(currentClassName)
+                    .append("       ├──Value Class Name ─► ").append(VrenDevTools.getClass(currentValue))
                     .append(System.lineSeparator())
                     .append("       │")
                     .append(System.lineSeparator())
-                    .append("       ├──Variable in Binary Code")
+                    .append("       ├──Value in Binary Code")
                     .append(System.lineSeparator())
                     .append("       │   └► ").append(Arrays.toString(toBinaryCode(currentValue)))
                     .append(System.lineSeparator())
                     .append("       │")
                     .append(System.lineSeparator())
-                    .append("       └──Variable in Hex")
+                    .append("       └──Value in Hex")
                     .append(System.lineSeparator())
                     .append("           └► ").append(toHex(currentValue))
                     .append(System.lineSeparator())
-                    .append("--------------------------------------------------");
+                    .append("--------------------------------------------------")
+                    .append(System.lineSeparator());
         }
-        sb.delete(sb.lastIndexOf(System.lineSeparator()), sb.length());
+        sb.delete(sb.length() - (50 + System.lineSeparator().length()), sb.length());
         return sb.toString();
     }
-    public String getReport(){
+    public String getReport(){//not yet
         StringBuilder sb = new StringBuilder();
         return sb.toString();
     }
-    public String toString(){
+    public String toString(){//not yet
         StringBuilder sb = new StringBuilder();
         return sb.toString();
     }
-    public int tagCount(){
+    public int tagCount(){//not yet
         return tagStorage.size();
     }
-    public int valueCount(){
+    public int valueCount(){//not yet
         return tagStorage.size();
     }
-    public int valueCount(Object tag){
+    public int valueCount(Object tag){//not yet
         if(tag != null){
             try{
                 return ((Tags) tagStorage.get(tag)).Value.size();
@@ -132,30 +157,6 @@ public class VrenMap {
         }else{
             return 0;
         }
-    }
-    public static byte[] toBinaryCode(Object var){
-        if(var == null) return null;
-        try{
-            ByteArrayOutputStream baos = new ByteArrayOutputStream();
-            ObjectOutputStream oos = new ObjectOutputStream(baos);
-            oos.writeObject(var);
-            oos.close();
-            return baos.toByteArray();
-        }catch (IOException e) {
-            return null;
-        }
-    }
-    public static String byteToHex(byte[] var){
-        if(var == null) return null;
-        StringBuilder sb = new StringBuilder();
-        for(int i = 0; i < var.length; i++){
-            sb.append(String.format("%02x", var[i]));
-        }
-        return sb.toString();
-    }
-    public static String toHex(Object var){
-        if(var == null) return null;
-        return byteToHex(toBinaryCode(var));
     }
 }
 
