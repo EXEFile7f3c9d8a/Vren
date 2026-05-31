@@ -14,7 +14,7 @@ uhhhhhh this project will take SOOO long to actually finish or release that uhh.
 
 
 # About me
-A kid, 13, knows some of java, trying to learn cpp.
+A kid :(, 13, knows some of java, trying to learn cpp.
 
 If you have any better piece of code for performance tell me    bcs uhhhhh idk im not smart dude.
 

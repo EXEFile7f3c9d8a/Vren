@@ -11,8 +11,6 @@ public class VrenMap {
     public static final byte BINARY_IN_REPORT_FALSE = 1;
     public static final byte HEX_IN_REPORT_TRUE = 2;
     public static final byte HEX_IN_REPORT_FALSE = 3;
-    private static final short SETTINGS_COUNT = 4;
-    private final int[] SETTING_LIST = new int[30];
     private final HashMap<Object, Object> tagStorage = new HashMap<>();
     private static final class Tags {
         public HashMap<Object, Object> Value = new HashMap<>();
@@ -53,9 +51,7 @@ public class VrenMap {
             }
         }
     }
-    public VrenMap(){
-        for(int i = 0; i < SETTINGS_COUNT; i++)SETTING_LIST[i] = i;
-    }
+    public VrenMap(){}//not yet
     public void Setting(byte set){//not yet
 
     }
