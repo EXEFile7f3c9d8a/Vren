@@ -21,6 +21,6 @@ why GitHub even need to auto push a action EVERYTIME when i push a new update wh
 # About me
 A kid :( , 13, knows some of Java, trying to learn cpp.
 
-If you have any better piece of code for performance tell me    bcs uhhhhh idk im not smart dude.
+If you have any better piece of code for performance tell me    bcs uhhhhh idk im not Albert Einstein dude.
 
 English is not my first language lol
