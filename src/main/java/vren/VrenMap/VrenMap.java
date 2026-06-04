@@ -20,12 +20,7 @@ public class VrenMap {
         public Tags(Object tag, Object[] valueName, Object[] value){
             if(tag == null)return;
             if(valueName == null && value != null){
-                for(int i = 0; i < value.length; i++){
-                    int temp;
-                    if(value[i]!=null) temp = value[i].hashCode();
-                    else temp = 0;
-                    this.Value.put(new Object[]{null, temp}, value[i]);
-                }
+                onlyValue(value);
                 this.LockTag = tag;
             }else if(value == null){
                 this.LockTag = tag;
@@ -38,18 +33,21 @@ public class VrenMap {
         }
         public void add(Object[] valueName, Object[] value){
             if(valueName == null && value != null){
-                for(int i = 0; i < value.length; i++){
-                    int temp;
-                    if(value[i]!=null) temp = value[i].hashCode();
-                    else temp = 0;
-                    this.Value.put(new Object[]{null, temp}, value[i]);
-                }
+                onlyValue(value);
             }else if(value == null){
                 return;
             }else{
                 for(int i = 0; i < value.length; i++){
                     this.Value.put(new Object[]{valueName[i], value[i].hashCode()}, value[i]);
                 }
+            }
+        }
+        private void onlyValue(Object[] value){
+            for(int i = 0; i < value.length; i++){
+                int temp;
+                if(value[i]!=null) temp = value[i].hashCode();
+                else temp = 0;
+                this.Value.put(new Object[]{null, temp}, value[i]);
             }
         }
     }
@@ -139,13 +137,13 @@ public class VrenMap {
         StringBuilder sb = new StringBuilder();
         return sb.toString();
     }
-    public int tagCount(){//not yet
+    public int size(){//not yet
         return tagStorage.size();
     }
-    public int valueCount(){//not yet
+    public int totalSize(){//not yet
         return tagStorage.size();
     }
-    public int valueCount(Object tag){//not yet
+    public int tagSize(Object tag){//not yet
         if(tag != null){
             try{
                 return ((Tags) tagStorage.get(tag)).Value.size();
