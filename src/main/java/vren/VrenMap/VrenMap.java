@@ -50,17 +50,17 @@ public class VrenMap {
     public VrenMap(){
         settings[0] = false;//binary in report
         settings[1] = true; //hex in report
-        Title.add(
-                "      .-----------------.      "   + System.lineSeparator()+
-                "     /     ___________   \\     "  + System.lineSeparator()+
-                "    /     /           \\   \\    " + System.lineSeparator()+
-                "   |   [___]         [___] |   "   + System.lineSeparator()+
-                "   |       \\_________/     |   "  + System.lineSeparator()+
-                "   |                       |   "   + System.lineSeparator()+
-                "   |          _____        |   "   + System.lineSeparator()+
-                "    \\        \\____/       /    " + System.lineSeparator()+
+        Title.addAll(List.of(
+                "      .-----------------.      "   ,
+                "     /     ___________   \\     "  ,
+                "    /     /           \\   \\    " ,
+                "   |   [___]         [___] |   "   ,
+                "   |       \\_________/     |   "  ,
+                "   |                       |   "   ,
+                "   |          _____        |   "   ,
+                "    \\        \\____/       /    " ,
                 "     \\___________________/     "
-        );
+        ));
         startUp.add(s -> {
 
         });
