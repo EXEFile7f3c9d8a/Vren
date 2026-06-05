@@ -9,12 +9,20 @@ import static vren.VrenDevTools.VrenDevTools.toHex;
 
 public class VrenMap {
     private static final String BLOB = "--------------------------------------------------";
-    public static final byte BINARY_IN_REPORT_TRUE = 0;
-    public static final byte BINARY_IN_REPORT_FALSE = 1;
-    public static final byte HEX_IN_REPORT_TRUE = 2;
-    public static final byte HEX_IN_REPORT_FALSE = 3;
+    private static final String indent = "       ";
+    private static final String lineContinue = "├";
+    private static final String lineEnd = "└";
+    private static final String vertical = "│";
+    private static final String horizontal = "──";
+    private static final String endArrow = "└►";
+
+    public static final byte BINARY_VALUE_IN_REPORT = 0;
+    public static final byte HEX_VALUE_IN_REPORT = 1;
+
+    public static final short settingsCount = 2;
+    private final boolean[] settings = new boolean[settingsCount];
     private final HashMap<Object, Object> tagStorage = new HashMap<>();
-    private static final class Tags {
+    private static final class Tags{
         public HashMap<Object, Object> Value = new HashMap<>();
         public Object LockTag = null;
         public Tags(Object tag, Object[] valueName, Object[] value){
@@ -51,9 +59,15 @@ public class VrenMap {
             }
         }
     }
-    public VrenMap(){}//not yet
-    public void Setting(byte set){//not yet
-
+    public VrenMap(){
+        settings[0] = false; //binary in report
+        settings[1] = true;//hex in report
+    }
+    public void enable(byte set){
+        if(set < settingsCount)settings[set] = true;
+    }
+    public void disable(byte set){
+        if(set < settingsCount)settings[set] = false;
     }
     public void addTag(Object tag){
         addTag(tag, null, null);
@@ -103,28 +117,44 @@ public class VrenMap {
             sb      .append("    Current Key Name ─► ").append(currentKey[0])
                     .append(System.lineSeparator())
                     .append("    Current Key Hash ─► ").append(currentKey[1])
+                    .append(System.lineSeparator())
                     .append("     Key in Hex ")
                     .append(System.lineSeparator())
                     .append("       │   └►").append(toHex(currentKey[0]))
                     .append(System.lineSeparator())
                     .append("     Value")
-                    .append(System.lineSeparator())
-                    .append("       ├──Value Class Name ─► ").append(VrenDevTools.getClass(currentValue))
-                    .append(System.lineSeparator())
-                    .append("       │")
-                    .append(System.lineSeparator())
-                    .append("       ├──Value in Binary Code")
-                    .append(System.lineSeparator())
-                    .append("       │   └► ").append(Arrays.toString(toBinary(currentValue)))
-                    .append(System.lineSeparator())
-                    .append("       │")
-                    .append(System.lineSeparator())
-                    .append("       └──Value in Hex")
-                    .append(System.lineSeparator())
-                    .append("           └► ").append(toHex(currentValue))
-                    .append(System.lineSeparator())
-                    .append(BLOB)
                     .append(System.lineSeparator());
+            List<String[]> render = new ArrayList<>();
+            render.add(new String[]{"Value Class Name ─► " + VrenDevTools.getClass(currentValue), null});
+            if(settings[BINARY_VALUE_IN_REPORT]) render.add(new String[]{"Value in Binary Code", Arrays.toString(toBinary(currentValue))});
+            if(settings[HEX_VALUE_IN_REPORT]) render.add(new String[]{"Value in Hex", toHex(currentValue)});
+//            ([title], [content]) if [content] == null then its one line instead of two
+//            every one more setting is one more if statement
+            for(int l = 0; l < render.size(); l++){
+                boolean isLast = l == render.size()-1;
+                String connect = isLast ? indent + lineEnd + horizontal : indent + lineContinue + horizontal;
+                String vertical = isLast ? indent : indent + lineContinue;
+                String title = render.get(l)[0];
+                String content = render.get(l)[1];
+                sb.append(connect).append(title).append(System.lineSeparator());
+                if(!isLast){
+                    sb.append(vertical).append(content == null ? "" : "   " + endArrow + " " + content).append(System.lineSeparator());
+                }else sb.append(vertical).append(content == null ? "" : "   " + endArrow + " " + content).append(System.lineSeparator());
+            }
+//                    .append("       ├──Value Class Name ─► ").append(VrenDevTools.getClass(currentValue))
+//                    .append(System.lineSeparator())
+//                    .append("       │")
+//                    .append(System.lineSeparator())
+//                    .append("       ├──Value in Binary Code")
+//                    .append(System.lineSeparator())
+//                    .append("       │   └► ").append(Arrays.toString(toBinary(currentValue)))
+//                    .append(System.lineSeparator())
+//                    .append("       │")
+//                    .append(System.lineSeparator())
+//                    .append("       └──Value in Hex")
+//                    .append(System.lineSeparator())
+//                    .append("           └► ").append(toHex(currentValue));
+            sb.append(System.lineSeparator()).append(BLOB).append(System.lineSeparator());
         }
         sb.delete(sb.length() - (BLOB.length() + System.lineSeparator().length()), sb.length());
         return sb.toString();
