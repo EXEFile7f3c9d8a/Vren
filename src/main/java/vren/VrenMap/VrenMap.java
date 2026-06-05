@@ -47,11 +47,11 @@ public class VrenMap {
         }
     }
     public VrenMap(){
-        settings[0] = false; //binary in report
-        settings[1] = true;//hex in report
+        settings[0] = false;//binary in report
+        settings[1] = true; //hex in report
     }
     public void enable(byte set){
-        if(set < settingsCount)settings[set] = true;
+        if(set < settingsCount) settings[set] = true;
     }
     public void disable(byte set){
         if(set < settingsCount)settings[set] = false;
