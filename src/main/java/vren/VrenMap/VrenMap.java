@@ -3,6 +3,7 @@ package vren.VrenMap;
 import vren.VrenDevTools.VrenDevTools;
 
 import java.util.*;
+import java.util.function.Consumer;
 
 import static vren.VrenDevTools.VrenDevTools.toBinary;
 import static vren.VrenDevTools.VrenDevTools.toHex;
@@ -21,6 +22,7 @@ public class VrenMap {
 
     public static final short settingsCount = 2;
     private final boolean[] settings = new boolean[settingsCount];
+    private static final List<Consumer<Byte>> startUp = new ArrayList<>();
     private final HashMap<Object, Object> tagStorage = new HashMap<>();
     private static final class Tags{
         public HashMap<Object, Object> Value = new HashMap<>();
@@ -49,9 +51,14 @@ public class VrenMap {
     public VrenMap(){
         settings[0] = false;//binary in report
         settings[1] = true; //hex in report
+
+        startUp.add(s -> {
+
+        });
     }
     public void enable(byte set){
         if(set < settingsCount) settings[set] = true;
+        if(startUp.size() - 1 > set) startUp.get(set).accept(set);
     }
     public void disable(byte set){
         if(set < settingsCount)settings[set] = false;
