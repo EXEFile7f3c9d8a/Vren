@@ -137,23 +137,8 @@ public class VrenMap {
                 String title = render.get(l)[0];
                 String content = render.get(l)[1];
                 sb.append(connect).append(title).append(System.lineSeparator());
-                if(!isLast){
-                    sb.append(vertical).append(content == null ? "" : "   " + endArrow + " " + content).append(System.lineSeparator());
-                }else sb.append(vertical).append(content == null ? "" : "   " + endArrow + " " + content).append(System.lineSeparator());
+                sb.append(vertical).append(content == null ? "" : "   " + endArrow + " " + content).append(System.lineSeparator());
             }
-//                    .append("       ├──Value Class Name ─► ").append(VrenDevTools.getClass(currentValue))
-//                    .append(System.lineSeparator())
-//                    .append("       │")
-//                    .append(System.lineSeparator())
-//                    .append("       ├──Value in Binary Code")
-//                    .append(System.lineSeparator())
-//                    .append("       │   └► ").append(Arrays.toString(toBinary(currentValue)))
-//                    .append(System.lineSeparator())
-//                    .append("       │")
-//                    .append(System.lineSeparator())
-//                    .append("       └──Value in Hex")
-//                    .append(System.lineSeparator())
-//                    .append("           └► ").append(toHex(currentValue));
             sb.append(System.lineSeparator()).append(BLOB).append(System.lineSeparator());
         }
         sb.delete(sb.length() - (BLOB.length() + System.lineSeparator().length()), sb.length());
