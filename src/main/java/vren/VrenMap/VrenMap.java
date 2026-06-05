@@ -34,9 +34,7 @@ public class VrenMap {
         public void add(Object[] valueName, Object[] value){
             if(valueName == null && value != null){
                 for(int i = 0; i < value.length; i++){
-                    int temp;
-                    if(value[i]!=null) temp = value[i].hashCode();
-                    else temp = 0;
+                    int temp = value[i] != null ? value[i].hashCode() : 0;
                     this.Value.put(new Object[]{null, temp}, value[i]);
                 }
             }else if(value == null){
