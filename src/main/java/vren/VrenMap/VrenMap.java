@@ -26,36 +26,23 @@ public class VrenMap {
         public HashMap<Object, Object> Value = new HashMap<>();
         public Object LockTag = null;
         public Tags(Object tag, Object[] valueName, Object[] value){
-            if(tag == null)return;
-            if(valueName == null && value != null){
-                onlyValue(value);
-                this.LockTag = tag;
-            }else if(value == null){
-                this.LockTag = tag;
-            }else{
-                for(int i = 0; i < value.length; i++){
-                    this.Value.put(new Object[]{valueName[i], value[i].hashCode()}, value[i]);
-                }
-                this.LockTag = tag;
-            }
+            if(tag != null)this.LockTag = tag;;
+            add(valueName, value);
         }
         public void add(Object[] valueName, Object[] value){
             if(valueName == null && value != null){
-                onlyValue(value);
+                for(int i = 0; i < value.length; i++){
+                    int temp;
+                    if(value[i]!=null) temp = value[i].hashCode();
+                    else temp = 0;
+                    this.Value.put(new Object[]{null, temp}, value[i]);
+                }
             }else if(value == null){
                 return;
             }else{
                 for(int i = 0; i < value.length; i++){
                     this.Value.put(new Object[]{valueName[i], value[i].hashCode()}, value[i]);
                 }
-            }
-        }
-        private void onlyValue(Object[] value){
-            for(int i = 0; i < value.length; i++){
-                int temp;
-                if(value[i]!=null) temp = value[i].hashCode();
-                else temp = 0;
-                this.Value.put(new Object[]{null, temp}, value[i]);
             }
         }
     }
