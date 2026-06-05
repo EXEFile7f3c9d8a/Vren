@@ -9,6 +9,7 @@ import static vren.VrenDevTools.VrenDevTools.toBinary;
 import static vren.VrenDevTools.VrenDevTools.toHex;
 
 public class VrenMap {
+    private static final List<String> Title = new ArrayList<>(); //HAHAHAHAAAAAAAAAA
     private static final String BLOB = "--------------------------------------------------";
     private static final String indent = "       ";
     private static final String lineContinue = "├";
@@ -34,14 +35,14 @@ public class VrenMap {
         public void add(Object[] valueName, Object[] value){
             if(valueName == null && value != null){
                 for(int i = 0; i < value.length; i++){
-                    int temp = value[i] != null ? value[i].hashCode() : 0;
+                    int temp = value[i] != null ? Objects.hash(value[i]) : 0;
                     this.Value.put(new Object[]{null, temp}, value[i]);
                 }
             }else if(value == null){
                 return;
             }else{
                 for(int i = 0; i < value.length; i++){
-                    this.Value.put(new Object[]{valueName[i], value[i].hashCode()}, value[i]);
+                    this.Value.put(new Object[]{valueName[i], Objects.hash(value[i])}, value[i]);
                 }
             }
         }
@@ -49,7 +50,17 @@ public class VrenMap {
     public VrenMap(){
         settings[0] = false;//binary in report
         settings[1] = true; //hex in report
-
+        Title.add(
+                "      .-----------------.      "   + System.lineSeparator()+
+                "     /     ___________   \\     "  + System.lineSeparator()+
+                "    /     /           \\   \\    " + System.lineSeparator()+
+                "   |   [___]         [___] |   "   + System.lineSeparator()+
+                "   |       \\_________/     |   "  + System.lineSeparator()+
+                "   |                       |   "   + System.lineSeparator()+
+                "   |          _____        |   "   + System.lineSeparator()+
+                "    \\        \\____/       /    " + System.lineSeparator()+
+                "     \\___________________/     "
+        );
         startUp.add(s -> {
 
         });
