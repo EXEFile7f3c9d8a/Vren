@@ -1,4 +1,4 @@
-package vren.VrenDevTools;
+package vren.vrendevtools;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;

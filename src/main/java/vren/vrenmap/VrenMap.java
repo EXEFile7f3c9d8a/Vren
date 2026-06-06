@@ -1,9 +1,9 @@
-package vren.VrenMap;
+package vren.vrenmap;
 
 import java.util.*;
 import java.util.function.Consumer;
 
-import static vren.VrenDevTools.VrenDevTools.*;
+import static vren.vrendevtools.VrenDevTools.*;
 
 public class VrenMap {
     private static final List<String> Title = new ArrayList<>(); //HAHAHAHAAAAAAAAAA
@@ -35,25 +35,32 @@ public class VrenMap {
             if(tag != null)this.LockTag = tag;
             add(clas, valueName, value);
         }
-        public void add(VrenMap clas, Object[] valueName, Object[] value){
+        public int[] add(VrenMap clas, Object[] valueName, Object[] value){
+            int[] tempHash;
             if(valueName == null && value != null){
+                tempHash = new int[value.length];
                 for(int i = 0; i < value.length; i++){
                     int temp = value[i] != null ? Objects.hash(value[i]) : 0;
                     this.Value.put(Arrays.asList(null, temp), value[i]);
+                    tempHash[i] = temp;
                     clas.lengthTotal++;
                     this.length++;
                 }
             }else if(value == null){
                 clas.length++;
-                return;
+                return new int[]{0};
             }else{
+                tempHash = new int[value.length];
                 for(int i = 0; i < value.length; i++){
+                    int temp = Objects.hash(value[i]);
                     this.Value.put(Arrays.asList(valueName[i], Objects.hash(value[i])), value[i]);
+                    tempHash[i] = temp;
                     clas.lengthTotal++;
                     this.length++;
                 }
             }
             clas.length++;
+            return tempHash;
         }
 //        Format: <tagClassName,tagToHex>|[valueName,valueHash,valueToHex]|...
         @Override
@@ -81,7 +88,7 @@ public class VrenMap {
                 "   |\\--[___]---------[___]/|   "   ,
                 "   |                       |   "  ,
                 "   |                       |   "   ,
-                "   |          _____        |   "   ,
+                "   |               /       |   "   ,
                 "    \\        \\____/       /    " ,
                 "     \\___________________/     "
         ));
@@ -127,27 +134,48 @@ public class VrenMap {
     public void disable(byte set){
         if(set < settingsCount) settings[set] = false;
     }
-    public void addTag(Object tag){
-        addTag(tag, null, null);
+    public int[] put(Object tag){
+        return put(tag, null, null);
     }
-    public void addTag(Object tag, Object[] value){
-        addTag(tag, null,  value);
+    public int[] put(Object tag, Object[] value){
+        return put(tag, null,  value);
     }
-    public void addTag(Object tag, Object[] valueName, Object[] value){
-        Object temp = new Tags(this, tag, valueName, value);
+    public int[] put(Object tag, Object valueName, Object value){
+        return put(tag, new Object[]{valueName}, new Object[]{value});
+    }
+    public int[] put(Object tag, Object[] valueName, Object[] value){
+        if(tag == null)throw new IllegalArgumentException("Null tag");
+        Tags temp = new Tags(this, tag, null, null);
+        int[] tempHash = temp.add(this, valueName, value);
         tagStorage.put(tag, temp);
+        return tempHash;
     }
-    public void addValue(Object tag, Object[] valueName, Object[] value){
-        Tags tags = (Tags) tagStorage.get(tag);
-        tags.add(this, valueName, value);
+    public int[] add(Object tag, Object[] valueName, Object[] value){
+        return ((Tags)tagStorage.get(tag)).add(this, valueName, value);
     }
-    public void setValue(){//not yet
-
+    public void setValue(Object tag, int hash, Object value){
+        setValue(tag, hash, null, value);
     }
-    public Object getValueOf(Object tag, String name){//not yet
-        return null;
+    public void setValue(Object tag, Object name, Object value){
+        setValue(tag, 0, name, value);
     }
-    public Object getTag(Object tag){
+    public void setValue(Object tag, int hash, Object name, Object value){
+        if(hash == 0 && name == null)throw new IllegalArgumentException("Null hash Null name, unable to find value");
+        Tags temp = (Tags)tagStorage.get(tag);
+        temp.Value.replace(Arrays.asList(name, hash), value);
+    }
+    public Object getValueOf(Object tag, String name){
+        return getValueOf(tag, 0, name);
+    }
+    public Object getValueOf(Object tag, int hash){
+        return getValueOf(tag, hash, null);
+    }
+    public Object getValueOf(Object tag, int hash, String name){
+        if(hash == 0 && name == null) return getTag(tag);
+        Tags tags = (Tags)tagStorage.get(tag);
+        return (tags).Value.get(Arrays.asList(name, hash));
+    }
+    public String getTag(Object tag){
         return ((Tags)tagStorage.get(tag)).toString();
     }
     public String getTagReport(Object tag){
@@ -182,11 +210,11 @@ public class VrenMap {
             for(int l = 0; l < render.size(); l++){
                 boolean isLast = l == render.size()-1;
                 String connect = isLast ? indent + lineEnd + horizontal : indent + lineContinue + horizontal;
-                String vertical = isLast ? indent : indent + lineContinue;
+                String vertical = isLast ? indent + " " : indent + VrenMap.vertical;
                 String title = render.get(l)[0];
                 String content = render.get(l)[1];
                 sb.append(connect).append(title).append(System.lineSeparator());
-                sb.append(vertical).append(content == null ? "" : "   " + endArrow + " " + content).append(System.lineSeparator());
+                sb.append(vertical).append(content == null ? "" : indent + endArrow + " " + content).append(System.lineSeparator());
             }
             sb.append(System.lineSeparator()).append(BLOB).append(System.lineSeparator());
         }
@@ -207,7 +235,7 @@ public class VrenMap {
         return sb.toString();
     }
     public int size(){
-        return length;
+        return tagStorage.size() != length ? tagStorage.size() : length;
     }
     public int totalSize(){
         return lengthTotal;
@@ -228,6 +256,10 @@ public class VrenMap {
         sb.deleteCharAt(sb.length() - 1);
         sb.append("}");
         return sb.toString();
+    }
+    @Override
+    public int hashCode(){
+        return Objects.hash(tagStorage, Arrays.hashCode(settings), lengthTotal);
     }
 }
 

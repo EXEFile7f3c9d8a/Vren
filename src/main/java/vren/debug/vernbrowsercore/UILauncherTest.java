@@ -1,4 +1,4 @@
-package vren.Debug.VernBrowserCore;
+package vren.debug.vernbrowsercore;
 
 import javafx.application.Application;
 import javafx.scene.Scene;
@@ -9,7 +9,7 @@ import javafx.stage.Stage;
 
 public class UILauncherTest extends Application {
     public static void main(String[] args){
-        javafx.application.Application.launch(vren.Debug.VernBrowserCore.UILauncherTest.class, args);
+        javafx.application.Application.launch(vren.debug.vernbrowsercore.UILauncherTest.class, args);
     }
 
     public void start(Stage primaryStage) throws Exception{
