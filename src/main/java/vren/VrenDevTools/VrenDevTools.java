@@ -29,7 +29,7 @@ public class VrenDevTools {
         if(var == null) return null;
         return binaryToHex(toBinary(var));
     }
-    public static String getClass(Object obj){
+    public static String getClassName(Object obj){
         if(obj == null) return null;
         return obj.getClass().getName();
     }

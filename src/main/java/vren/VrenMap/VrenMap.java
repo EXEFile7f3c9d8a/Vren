@@ -1,12 +1,9 @@
 package vren.VrenMap;
 
-import vren.VrenDevTools.VrenDevTools;
-
 import java.util.*;
 import java.util.function.Consumer;
 
-import static vren.VrenDevTools.VrenDevTools.toBinary;
-import static vren.VrenDevTools.VrenDevTools.toHex;
+import static vren.VrenDevTools.VrenDevTools.*;
 
 public class VrenMap {
     private static final List<String> Title = new ArrayList<>(); //HAHAHAHAAAAAAAAAA
@@ -25,26 +22,50 @@ public class VrenMap {
     private final boolean[] settings = new boolean[settingsCount];
     private static final List<Consumer<Byte>> startUp = new ArrayList<>();
     private final HashMap<Object, Object> tagStorage = new HashMap<>();
-    private static final class Tags{
-        public HashMap<Object, Object> Value = new HashMap<>();
+    public int length = 0;
+    public int lengthTotal = 0;
+    private final class Tags{
+//      Format: HashMap<List(valueName, valueHash), value>
+        public int length = 0;
+        public HashMap<List<Object>, Object> Value = new HashMap<>();
         public Object LockTag = null;
-        public Tags(Object tag, Object[] valueName, Object[] value){
-            if(tag != null)this.LockTag = tag;;
-            add(valueName, value);
+        public Tags(VrenMap clas, Object tag, Object[] valueName, Object[] value){
+            if(tag != null)this.LockTag = tag;
+            add(clas, valueName, value);
         }
-        public void add(Object[] valueName, Object[] value){
+        public void add(VrenMap clas, Object[] valueName, Object[] value){
             if(valueName == null && value != null){
                 for(int i = 0; i < value.length; i++){
                     int temp = value[i] != null ? Objects.hash(value[i]) : 0;
-                    this.Value.put(new Object[]{null, temp}, value[i]);
+                    this.Value.put(Arrays.asList(null, temp), value[i]);
+                    clas.lengthTotal++;
+                    this.length++;
                 }
             }else if(value == null){
+                clas.length++;
                 return;
             }else{
                 for(int i = 0; i < value.length; i++){
-                    this.Value.put(new Object[]{valueName[i], Objects.hash(value[i])}, value[i]);
+                    this.Value.put(Arrays.asList(valueName[i], Objects.hash(value[i])), value[i]);
+                    clas.lengthTotal++;
+                    this.length++;
                 }
             }
+            clas.length++;
+        }
+//        Format: [tagClassName,tagToHex]|[valueName,valueHash,valueToHex]|...
+        public String toString() {
+            StringBuilder sb = new StringBuilder();
+            sb.append("[").append(getClassName(LockTag)).append(",").append(toHex(LockTag)).append("]|");
+            List<Map.Entry<List<Object>, Object>> entries = new ArrayList<>(Value.entrySet());
+            for(int i = 0; i < this.length; i++){
+                Map.Entry<List<Object>, Object> entry = entries.get(i);
+                List<Object> currentKey = entry.getKey();
+                Object currentValue = entry.getValue();
+                sb.append("[").append(currentKey.getFirst()).append(currentKey.get(1)).append(toHex(currentValue)).append("]|");
+            }
+            sb.deleteCharAt(sb.length() - 1);
+            return sb.toString();
         }
     }
     public VrenMap(){
@@ -79,56 +100,47 @@ public class VrenMap {
         addTag(tag, null,  value);
     }
     public void addTag(Object tag, Object[] valueName, Object[] value){
-        Object temp = new Tags(tag, valueName, value);
+        Object temp = new Tags(this, tag, valueName, value);
         tagStorage.put(tag, temp);
     }
     public void addValue(Object tag, Object[] valueName, Object[] value){
         Tags tags = (Tags) tagStorage.get(tag);
-        tags.add(valueName, value);
+        tags.add(this, valueName, value);
     }
     public void setValue(){//not yet
+
     }
-    public Object getValueOf(Object tag){//not yet
-        return getValueOf(tag, null);
-    }
-    public Object getValueOf(Object tag, String hash){//not yet
+    public Object getValueOf(Object tag, String name){//not yet
         return null;
     }
-    public Object getTag(Object tag){//not yet
-        return ((Tags)tagStorage.get(tag)).Value;
-    }
-    public Object getTagFormatted(Object tag){//not yet
-        StringBuilder sb = new StringBuilder();
-        for(int i = 0; i<2; i++){
-
-        }
-        return sb.toString();
+    public Object getTag(Object tag){
+        return ((Tags)tagStorage.get(tag)).toString();
     }
     public String getTagReport(Object tag){
         if(tagStorage.get(tag) == null)return null;
-        Map<Object, Object> tagCopy = ((Tags)tagStorage.get(tag)).Value;
+        Map<List<Object>, Object> tagCopy = ((Tags)tagStorage.get(tag)).Value;
         if(tagCopy.isEmpty()) return null;
-        List<Map.Entry<Object, Object>> entries = new ArrayList<>(tagCopy.entrySet());
+        List<Map.Entry<List<Object>, Object>> entries = new ArrayList<>(tagCopy.entrySet());
         StringBuilder sb = new StringBuilder();
 
         sb.append("====================Tag Report====================");
         sb.append(System.lineSeparator());
         for(int i = 0; i < tagCopy.size(); i++){
-            Map.Entry<Object, Object> entry = entries.get(i);
-            Object[] currentKey = (Object[]) entry.getKey();
+            Map.Entry<List<Object>, Object> entry = entries.get(i);
+            List<Object> currentKey = entry.getKey();
             Object currentValue = entry.getValue();
-            sb      .append("    Current Key Name ─► ").append(currentKey[0])
+            sb      .append("    Current Key Name ─► ").append(currentKey.getFirst())
                     .append(System.lineSeparator())
-                    .append("    Current Key Hash ─► ").append(currentKey[1])
+                    .append("    Current Key Hash ─► ").append(currentKey.get(1))
                     .append(System.lineSeparator())
                     .append("     Key in Hex ")
                     .append(System.lineSeparator())
-                    .append("       │   └►").append(toHex(currentKey[0]))
+                    .append("       │   └►").append(toHex(currentKey.getFirst()))
                     .append(System.lineSeparator())
                     .append("     Value")
                     .append(System.lineSeparator());
             List<String[]> render = new ArrayList<>();
-            render.add(new String[]{"Value Class Name ─► " + VrenDevTools.getClass(currentValue), null});
+            render.add(new String[]{"Value Class Name ─► " + getClassName(currentValue), null});
             if(settings[BINARY_VALUE_IN_REPORT]) render.add(new String[]{"Value in Binary Code", Arrays.toString(toBinary(currentValue))});
             if(settings[HEX_VALUE_IN_REPORT]) render.add(new String[]{"Value in Hex", toHex(currentValue)});
 //            ([title], [content]) if [content] == null then its one line instead of two
@@ -147,30 +159,41 @@ public class VrenMap {
         sb.delete(sb.length() - (BLOB.length() + System.lineSeparator().length()), sb.length());
         return sb.toString();
     }
-    public String getReport(){//not yet
+    public String getReport(){
         StringBuilder sb = new StringBuilder();
-        return sb.toString();
-    }
-    public String toString(){//not yet
-        StringBuilder sb = new StringBuilder();
-        return sb.toString();
-    }
-    public int size(){//not yet
-        return tagStorage.size();
-    }
-    public int totalSize(){//not yet
-        return tagStorage.size();
-    }
-    public int tagSize(Object tag){//not yet
-        if(tag != null){
-            try{
-                return ((Tags) tagStorage.get(tag)).Value.size();
-            }catch (NullPointerException e){
-                return 0;
-            }
-        }else{
-            return 0;
+        for(int i = 0; i < Title.size(); i++){
+            sb.append(Title.get(i)).append(System.lineSeparator());
         }
+        List<Map.Entry<Object, Object>> entries = new ArrayList<>(tagStorage.entrySet());
+        for(int i = 0; i < this.length; i++) {
+            Map.Entry<Object, Object> entry = entries.get(i);
+            Object currentKey = entry.getKey();
+            sb.append(getTagReport(currentKey));
+        }
+        return sb.toString();
+    }
+    public int size(){
+        return length;
+    }
+    public int totalSize(){
+        return lengthTotal;
+    }
+    public int tagSize(Object tag){
+        return ((Tags)tagStorage.get(tag)).length;
+    }
+    @Override
+    public String toString(){
+        StringBuilder sb = new StringBuilder();
+        List<Map.Entry<Object, Object>> entries = new ArrayList<>(tagStorage.entrySet());
+        sb.append("{");
+        for(int i = 0; i < tagStorage.size(); i++){
+            Map.Entry<Object, Object> entry = entries.get(i);
+            Object currentValue = entry.getValue();
+            sb.append(((Tags)currentValue).toString()).append("-");
+        }
+        sb.deleteCharAt(sb.length() - 1);
+        sb.append("}");
+        return sb.toString();
     }
 }
 
