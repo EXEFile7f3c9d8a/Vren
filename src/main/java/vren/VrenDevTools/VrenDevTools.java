@@ -26,11 +26,9 @@ public class VrenDevTools {
         return sb.toString();
     }
     public static String toHex(Object var){
-        if(var == null) return null;
-        return binaryToHex(toBinary(var));
+        return var != null ? binaryToHex(toBinary(var)) : null;
     }
     public static String getClassName(Object obj){
-        if(obj == null) return null;
-        return obj.getClass().getName();
+        return obj != null ? obj.getClass().getName() : null;
     }
 }
