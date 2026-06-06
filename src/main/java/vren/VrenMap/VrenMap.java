@@ -24,7 +24,7 @@ public class VrenMap {
     private final HashMap<Object, Object> tagStorage = new HashMap<>();
     public int length = 0;
     public int lengthTotal = 0;
-    private final class Tags{
+    private static final class Tags{
 //      Format: HashMap<List(valueName, valueHash), value>
         public int length = 0;
         public HashMap<List<Object>, Object> Value = new HashMap<>();
@@ -73,17 +73,17 @@ public class VrenMap {
         settings[1] = true; //hex in report
         Title.addAll(List.of(
                 "      .-----------------.      "   ,
-                "     /     ___________   \\     "  ,
-                "    /     /           \\   \\    " ,
-                "   |   [___]         [___] |   "   ,
-                "   |       \\_________/     |   "  ,
+                "     /                   \\     "  ,
+                "    /                     \\    " ,
+                "   |\\--[___]---------[___]/|   "   ,
+                "   |                       |   "  ,
                 "   |                       |   "   ,
                 "   |          _____        |   "   ,
                 "    \\        \\____/       /    " ,
                 "     \\___________________/     "
         ));
         startUp.add(s -> {
-
+            //this is supposed to be extra binary setting execution
         });
     }
     public void enable(byte set){
