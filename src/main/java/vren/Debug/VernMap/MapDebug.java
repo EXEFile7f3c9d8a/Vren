@@ -17,5 +17,7 @@ public class MapDebug {
         obj.enable(VrenMap.BINARY_VALUE_IN_REPORT);
         obj.addValue("Value", new Object[]{"1", "2"}, new Object[]{"1-", "2-"});
         System.out.println(obj.getTagReport("Value"));
+        System.out.println(System.lineSeparator());
+
     }
 }

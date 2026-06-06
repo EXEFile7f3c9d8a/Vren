@@ -17,15 +17,17 @@ public class VrenMap {
 
     public static final byte BINARY_VALUE_IN_REPORT = 0;
     public static final byte HEX_VALUE_IN_REPORT = 1;
+    public static final byte CLEAR_STORAGE_IN_RESET = 2;
+    public static final byte CLEAR_SETTING_IN_RESET = 3;
 
-    public static final short settingsCount = 2;
+    public static final short settingsCount = 4;
     private final boolean[] settings = new boolean[settingsCount];
     private static final List<Consumer<Byte>> startUp = new ArrayList<>();
     private final HashMap<Object, Object> tagStorage = new HashMap<>();
     public int length = 0;
     public int lengthTotal = 0;
     private static final class Tags{
-//      Format: HashMap<List(valueName, valueHash), value>
+//      Format: HashMap<List(OBJValueName, OBJValueHash), OBJValue>
         public int length = 0;
         public HashMap<List<Object>, Object> Value = new HashMap<>();
         public Object LockTag = null;
@@ -53,24 +55,25 @@ public class VrenMap {
             }
             clas.length++;
         }
-//        Format: [tagClassName,tagToHex]|[valueName,valueHash,valueToHex]|...
+//        Format: <tagClassName,tagToHex>|[valueName,valueHash,valueToHex]|...
+        @Override
         public String toString() {
             StringBuilder sb = new StringBuilder();
-            sb.append("[").append(getClassName(LockTag)).append(",").append(toHex(LockTag)).append("]|");
+            sb.append("<").append(getClassName(LockTag)).append(",").append(toHex(LockTag)).append(">|");
             List<Map.Entry<List<Object>, Object>> entries = new ArrayList<>(Value.entrySet());
-            for(int i = 0; i < this.length; i++){
+            for(int i = 0; i < Value.size(); i++){
                 Map.Entry<List<Object>, Object> entry = entries.get(i);
                 List<Object> currentKey = entry.getKey();
                 Object currentValue = entry.getValue();
-                sb.append("[").append(currentKey.getFirst()).append(currentKey.get(1)).append(toHex(currentValue)).append("]|");
+                sb.append("[").append(currentKey.getFirst()).append(",").append(currentKey.get(1)).append(",").append(toHex(currentValue)).append("]|");
             }
-            sb.deleteCharAt(sb.length() - 1);
+            sb.deleteCharAt(!sb.isEmpty() && sb.charAt(sb.length()-1) == '|' ? sb.length() - 1 :sb.length());
             return sb.toString();
         }
     }
     public VrenMap(){
-        settings[0] = false;//binary in report
-        settings[1] = true; //hex in report
+        resetSetting();
+        reset();
         Title.addAll(List.of(
                 "      .-----------------.      "   ,
                 "     /                   \\     "  ,
@@ -85,13 +88,44 @@ public class VrenMap {
         startUp.add(s -> {
             //this is supposed to be extra binary setting execution
         });
+        startUp.add(s -> {
+            //this is supposed to be extra hex setting execution
+        });
+        startUp.add(s -> {
+            //this is supposed to be extra storage clear setting execution
+        });
+        startUp.add(s -> {
+            //this is supposed to be extra setting clear setting execution
+        });
+    }
+    public void reset(){
+        List<Runnable> temp = new ArrayList<>();
+        if(settings[CLEAR_STORAGE_IN_RESET]){
+            temp.add(() -> {
+                tagStorage.clear();
+                length = 0;
+                lengthTotal = 0;
+            });
+        }
+        if(settings[CLEAR_SETTING_IN_RESET]){
+            temp.add(this::resetSetting);
+        }
+        for(int i = 0; i < temp.size(); i++){
+            temp.get(i).run();
+        }
+    }
+    public void resetSetting(){
+        settings[BINARY_VALUE_IN_REPORT] = false;//binary in report
+        settings[HEX_VALUE_IN_REPORT]    = true; //hex in report
+        settings[CLEAR_STORAGE_IN_RESET] = true; //reset the values stored
+        settings[CLEAR_SETTING_IN_RESET] = true; //reset the settings
     }
     public void enable(byte set){
         if(set < settingsCount) settings[set] = true;
-        if(startUp.size() - 1 > set) startUp.get(set).accept(set);
+        if(startUp.size() >= set) startUp.get(set).accept(set);
     }
     public void disable(byte set){
-        if(set < settingsCount)settings[set] = false;
+        if(set < settingsCount) settings[set] = false;
     }
     public void addTag(Object tag){
         addTag(tag, null, null);
@@ -165,7 +199,7 @@ public class VrenMap {
             sb.append(Title.get(i)).append(System.lineSeparator());
         }
         List<Map.Entry<Object, Object>> entries = new ArrayList<>(tagStorage.entrySet());
-        for(int i = 0; i < this.length; i++) {
+        for(int i = 0; i < tagStorage.size(); i++) {
             Map.Entry<Object, Object> entry = entries.get(i);
             Object currentKey = entry.getKey();
             sb.append(getTagReport(currentKey));
