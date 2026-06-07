@@ -1,10 +1,11 @@
 plugins {
     id 'java'
+    id 'maven-publish'
     id 'org.openjfx.javafxplugin' version '0.1.0'
 }
 
 group = 'org.vren'
-version = '1.0-ALPHA'
+version = '1.0.0.003'
 
 repositories {
     mavenCentral()
@@ -19,8 +20,8 @@ dependencies {
 }
 
 javafx {
-   version = "21"
-   modules = [ 'javafx.controls', 'javafx.fxml' ]
+    version = "21"
+    modules = [ 'javafx.controls', 'javafx.fxml' ]
 }
 
 tasks.withType(JavaExec).configureEach {
@@ -29,11 +30,19 @@ tasks.withType(JavaExec).configureEach {
     }
 }
 
-tasks.withType(JavaCompile) {
+tasks.withType(JavaCompile).configureEach {
     options.encoding = 'UTF-8'
 }
-tasks.withType(JavaExec) {
+tasks.withType(JavaExec).configureEach {
     jvmArgs += ["-Dfile.encoding=UTF-8", "-Dstdout.encoding=UTF-8", "-Dstderr.encoding=UTF-8"]
+}
+
+publishing {
+    publications {
+        create('mavenJava', MavenPublication) {
+            from components.java
+        }
+    }
 }
 
 test {

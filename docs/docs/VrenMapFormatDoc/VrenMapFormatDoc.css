@@ -1,21 +1,45 @@
-@font-face{
-    font-family: "Aldrich";
-    src: url('../../res/fonts/Aldrich-Regular.ttf') format('truetype');
+#docsStart{
+    font-weight: bolder;
+    font-size: large;
 }
-@font-face{
-    font-family: "Google-Sans";
-    src: url('../../res/fonts/GoogleSans-VariableFont_GRAD,opsz,wght.ttf') format('truetype');
-}
-
-body{
-    text-align: center;
-    background-color: #f8f9fa;
+#docsTable{
+    width: 1800px;
+    table-layout: fixed;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
 }
 
-.Paragraphs{
-    font-family: "Google-Sans", sans-serif;
-    font-optical-sizing: auto;
-    font-weight: normal;
-    font-style: normal;
-    font-variation-settings:"GRAD" 0;
+td{
+    word-wrap: break-word;
+}
+#FirstLine td {
+    background-color: #c9c9c9 !important;
+}
+#FirstLine{
+    height: 40px;
+}
+.Functions{
+    width: 140px;
+    height: 30px;
+    background-color: #e0e0e0;
+}
+.HasInput, .HasOutput{
+    width: 125px;
+    height: 30px;
+    background-color: #e0e0e0;
+}
+.InputFormat, .OutputFormat, .InputType, .OutputType{
+    width: 170px;
+    height: 30px;
+    background-color: #e0e0e0;
+}
+.FunctionCalls{
+    width: 156px;
+    height: 30px;
+    background-color: #e0e0e0;
+}
+.Info{
+    width: 605px;
+    height: 30px;
+    background-color: #e0e0e0;
 }

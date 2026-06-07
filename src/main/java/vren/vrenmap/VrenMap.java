@@ -80,7 +80,6 @@ public class VrenMap {
     }
     public VrenMap(){
         resetSetting();
-        reset();
         Title.addAll(List.of(
                 "      .-----------------.      "   ,
                 "     /                   \\     "  ,

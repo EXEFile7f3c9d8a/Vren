@@ -5,14 +5,123 @@
     <meta charset="UTF-8">
     <title>Vren Map docs</title>
     <link rel="image/png" href="../../res/image/title/UniversalTitleImage.png">
+    <link rel = "stylesheet" href = "../../res/stylesheets/Universal.css">
     <link rel = "stylesheet" href = "VrenMapFormatDoc.css">
+    <link rel="icon" type="image/png" href="../../res/image/title/UniversalTitleImage.png">
     <script src = "VrenMapFormatDoc.js" defer></script>
 </head>
 <body>
-<div class = "Paragraphs">
-    <p>Coming SOON</p>
-</div>
 
+<header class = "topBars">
+    <nav>
+        <a href="../../index.html" target="_self" title = "Home page">
+            <img id = "home" src = "../../res/image/title/UniversalTitleImage.png" alt = "img">
+        </a>
+
+    </nav>
+</header>
+
+<div class = "main">
+    <div class = "docs">
+        <div class = "paragraphs">
+            <p id = "docsStart">Here is some doc that might help you learn how to use VrenMap, v1.0.0.003-release</p>
+        </div>
+        <table id = "docsTable">
+            <tr id = "FirstLine" class = "docTableLines">
+                <td class = "Functions"    >Functions</td>
+                <td class = "HasOutput"    >Has output?</td>
+                <td class = "OutputFormat" >Format of output</td>
+                <td class = "OutputType"   >Output class type</td>
+                <td class = "HasInput"     >Has input?</td>
+                <td class = "InputFormat"  >Format of input</td>
+                <td class = "InputType"    >Input class type</td>
+                <td class = "FunctionCalls">Function it calls</td>
+                <td class = "Info"         >More info</td>
+            </tr>
+            <tr class = "Lines">
+                <td class = "Functions"    >VrenMap()</td>
+                <td class = "HasOutput"    >No</td>
+                <td class = "OutputFormat" >No output</td>
+                <td class = "OutputType"   >No output</td>
+                <td class = "HasInput"     >No</td>
+                <td class = "InputFormat"  >No input</td>
+                <td class = "InputType"    >No input</td>
+                <td class = "FunctionCalls">resetSetting()</td>
+                <td class = "Info"         >This function is a constructor function</td>
+            </tr>
+            <tr class = "Lines">
+                <td class = "Functions"    >reset()</td>
+                <td class = "HasOutput"    >No</td>
+                <td class = "OutputFormat" >No output</td>
+                <td class = "OutputType"   >No output</td>
+                <td class = "HasInput"     >No</td>
+                <td class = "InputFormat"  >No input</td>
+                <td class = "InputType"    >No input</td>
+                <td class = "FunctionCalls">resetSetting()</td>
+                <td class = "Info"         >This function works as well as the clear() function in HashMap, which deleted everything,
+                    however you can change that little bit by enable() and disable()</td>
+            </tr>
+            <tr class = "Lines">
+                <td class = "Functions"    >resetSetting()</td>
+                <td class = "HasOutput"    >No</td>
+                <td class = "OutputFormat" >No output</td>
+                <td class = "OutputType"   >No output</td>
+                <td class = "HasInput"     >No</td>
+                <td class = "InputFormat"  >No input</td>
+                <td class = "InputType"    >No input</td>
+                <td class = "FunctionCalls">None</td>
+                <td class = "Info"         >This function resets all settings</td>
+            </tr>
+            <tr class = "Lines">
+                <td class = "Functions"    >enable()</td>
+                <td class = "HasOutput"    >No</td>
+                <td class = "OutputFormat" >No output</td>
+                <td class = "OutputType"   >No output</td>
+                <td class = "HasInput"     >Yes</td>
+                <td class = "InputFormat"  >(set)</td>
+                <td class = "InputType"    >raw byte</td>
+                <td class = "FunctionCalls">None</td>
+                <td class = "Info"         >This function enables setting by byte numbers, there is static variable choices</td>
+            </tr>
+            <tr class = "Lines">
+                <td class = "Functions"    >disable()</td>
+                <td class = "HasOutput"    >No</td>
+                <td class = "OutputFormat" >No output</td>
+                <td class = "OutputType"   >No output</td>
+                <td class = "HasInput"     >Yes</td>
+                <td class = "InputFormat"  >(set)</td>
+                <td class = "InputType"    >raw byte</td>
+                <td class = "FunctionCalls">None</td>
+                <td class = "Info"         >This function disables setting by byte numbers, there is static variable choices</td>
+            </tr>
+            <tr class = "Lines">
+                <td class = "Functions"    >put</td>
+                <td class = "HasOutput"    >Yes</td>
+                <td class = "OutputFormat" >int[]{0}</td>
+                <td class = "OutputType"   >raw int[]</td>
+                <td class = "HasInput"     >Yes</td>
+                <td class = "InputFormat"  >(tag)</td>
+                <td class = "InputType"    >java.lang.Object</td>
+                <td class = "FunctionCalls">put</td>
+                <td class = "Info"         >This function is putting a tag with no values in it and returning int[] with value 0</td>
+            </tr>
+            <tr class = "Lines">
+                <td class = "Functions"    >put</td>
+                <td class = "HasOutput"    >Yes</td>
+                <td class = "OutputFormat" >int[]{value.hashCode(), value.hashCode()...}</td>
+                <td class = "OutputType"   >raw int[]</td>
+                <td class = "HasInput"     >Yes</td>
+                <td class = "InputFormat"  >(tag, value[])</td>
+                <td class = "InputType"    >java.lang.Object, java.lang.Object[]</td>
+                <td class = "FunctionCalls">put</td>
+                <td class = "Info"         >This function is putting a tag with multiple values in it and returning int[] with value value.hashCode()
+                    , depends how long you put</td>
+            </tr>
+
+        </table>
+        Not done
+    </div>
+</div>
 
 </body>
 </html>
