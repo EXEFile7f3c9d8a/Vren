@@ -5,7 +5,7 @@ plugins {
 }
 
 group = 'org.vren'
-version = '1.0.0.002'
+version = '1.0.0.003'
 
 dependencies {
     testImplementation platform('org.junit:junit-bom:5.10.0')
