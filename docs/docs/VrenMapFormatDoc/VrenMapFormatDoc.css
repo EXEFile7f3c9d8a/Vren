@@ -2,16 +2,6 @@
     font-weight: bolder;
     font-size: large;
 }
-#docsTable{
-    width: 1800px;
-    table-layout: fixed;
-    word-wrap: break-word;
-    overflow-wrap: break-word;
-}
-
-td{
-    word-wrap: break-word;
-}
 #FirstLine td {
     background-color: #c9c9c9 !important;
 }
