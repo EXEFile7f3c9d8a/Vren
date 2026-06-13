@@ -1,21 +1,3 @@
-const table = document.getElementById("docsTable");
-const firstL = document.getElementById("FirstLine");
-
-let uniHeight = "30px";
-let uniColor = "#e0e0e0";
-let tableWid = 1800;
-
-let fun         = [0, 135, uniHeight, "Functions"];
-let output      = [1, 120.6, uniHeight, "Has output?"];
-let outputFor   = [2, 164, uniHeight, "Format of output"];
-let outputClass = [3, 164, uniHeight, "Output class type"];
-let input       = [4, 120.6, uniHeight, "Has input?"];
-let inputFor    = [5, 164, uniHeight, "Format of input"];
-let inputClass  = [6, 164, uniHeight, "Input class type"];
-let funCall     = [7, 150.5, uniHeight, "Function it calls"];
-let Info        = [8, 583.5, uniHeight, "More info"];
-
-let lnk = [fun, output, outputFor, outputClass, input, inputFor, inputClass, funCall, Info];
 
 let classes = [
     "Functions",
@@ -216,39 +198,67 @@ let hashCode = [
     "None",
     "This function returns Object.hash(this)."
 ];
-let temp = [
+let functions = [
     VrenMap, reset, resetSetting, enable, disable, put0, put1, put2, put3, add0, add1,
     getValueOf0, getValueOf1, getValueOf2, setValue0, setValue1, setValue2, getTag, getTagReport,
     getReport, size, totalSize, tagSize, toString, hashCode
 ];
 
+const table = document.getElementById("docsTable");
+const firstL = document.getElementById("FirstLine");
 
-table.style.width =  "1800px";
+const uniHeight = "30px";
+const uniColor = "#e0e0e0";
+const tableWid = 1866;
+
+table.style.width =  "1866px";
 table.style.tableLayout =  "fixed";
 table.style.overflowWrap =  "break-word";
 
-let tdTmp = document.createElement("td");
-tdTmp.className = firstL.className;
-tdTmp.style.setProperty("background-color", "#c9c9c9", "important");
-tdTmp.style.height = "40px"
-for(let i = 0; i < temp.length; i++){
-    let trTemp = document.createElement("tr");
-    trTemp.className = "Lines";
-    for(let o = 0; o < firstLine.length; o++){
-        let tdTemp = document.createElement("td");
-        tdTemp.className = classes[o];
-        tdTemp.textContent = (temp[i])[o];
 
-        tdTemp.style.width = CVT((lnk[o])[1]);
-        tdTemp.style.height = uniHeight;
-        tdTemp.style.backgroundColor = uniColor;
-        tdTemp.style.tableLayout = "fixed";
-        tdTemp.style.overflowWrap = "break-word"
-        trTemp.appendChild(tdTemp)
+let information = [
+    [0, "135px", uniHeight, "Functions"],
+    [1, "120.6px", uniHeight, "Has output?"],
+    [2, "164px", uniHeight, "Format of output"],
+    [3, "164px", uniHeight, "Output class type"],
+    [4, "120.6px", uniHeight, "Has input?"],
+    [5, "164px", uniHeight, "Format of input"],
+    [6, "164px", uniHeight, "Input class type"],
+    [7, "150.5px", uniHeight, "Function it calls"],
+    [8, "583.5px", uniHeight, "More info"]
+];
+
+
+{
+    let subTd = document.createElement("td");
+    for(let i = 0; i < firstLine.length; i++){
+        subTd = document.createElement("td");
+        subTd.className = firstL.className;
+        subTd.className = classes[i];
+        subTd.textContent = firstLine[i];
+
+        subTd.style.height = "40px";
+        subTd.style.width = (information[i])[1];
+        subTd.style.backgroundColor = "#c9c9c9";
+        firstL.appendChild(subTd);
     }
-    table.appendChild(trTemp)
 }
+{
+    let tabTr = document.createElement("tr");
+    tabTr.className = "Lines";
+    let subTd = document.createElement("td");
+    for(let i = 0; i < functions.length; i++){
+        tabTr = document.createElement("tr");
+        for(let o = 0; o < functions[i].length; o++){
+            subTd = document.createElement("td");
+            subTd.className = classes[o];
+            subTd.textContent = (functions[i])[o];
 
-function CVT(pxValue){
-    return ((pxValue / tableWid) * 100).toFixed(2) + "%";
+            subTd.style.height = uniHeight;
+            subTd.style.width = (information[o])[1];
+            subTd.style.backgroundColor = uniColor;
+            tabTr.appendChild(subTd);
+        }
+        table.appendChild(tabTr);
+    }
 }

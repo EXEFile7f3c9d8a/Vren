@@ -2,34 +2,3 @@
     font-weight: bolder;
     font-size: large;
 }
-#FirstLine td {
-    background-color: #c9c9c9 !important;
-}
-#FirstLine{
-    height: 40px;
-}
-.Functions{
-    width: 7.5%;
-    height: 30px;
-    background-color: #e0e0e0;
-}
-.HasInput, .HasOutput{
-    width: 6.7%;
-    height: 30px;
-    background-color: #e0e0e0;
-}
-.InputFormat, .OutputFormat, .InputType, .OutputType{
-    width: 9.11%;
-    height: 30px;
-    background-color: #e0e0e0;
-}
-.FunctionCalls{
-    width: 8.36%;
-    height: 30px;
-    background-color: #e0e0e0;
-}
-.Info{
-    width: 32.42%;
-    height: 30px;
-    background-color: #e0e0e0;
-}
