@@ -142,7 +142,7 @@ let getValueOf2 = [
 ];
 let getTag = [
     "getTag()",
-    "Yes", "(&lt;tagClass,tagHex>|[name,hash,hex]|...)", "java.lang.String",
+    "Yes", "(<tagClass,tagHex>|[name,hash,hex]|...)", "java.lang.String",
     "Yes", "(tag)", "java.lang.Object",
     "Tags.toString",
     "This function returns String of the tag"
@@ -186,7 +186,7 @@ let tagSize = [
 ];
 let toString = [
     "toString()",
-    "Yes", "({&lt;tagClass,tagHex>|[name,hash,hex]|... ...})", "java.lang.String",
+    "Yes", "({<tagClass,tagHex>|[name,hash,hex]|... ...})", "java.lang.String",
     "No", "No input", "No input",
     "Tags.toString()",
     "This function returns what the whole thing is like."
