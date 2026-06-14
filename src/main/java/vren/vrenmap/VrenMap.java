@@ -15,16 +15,9 @@ public class VrenMap {
     private static final String endArrow = "└►";
 
 
-    public static final byte BINARY_VALUE_IN_REPORT = 0;
-    public static final byte HEX_VALUE_IN_REPORT = 1;
-    public static final byte CLEAR_STORAGE_IN_RESET = 2;
-    public static final byte CLEAR_SETTING_IN_RESET = 3;
-
     public static final byte SETTINGS_COUNT = 4;
     private final boolean[] settings = new boolean[SETTINGS_COUNT];
 
-
-    public static final byte SETTING_ACTIVE_RUNNABLE_PLUGIN = 0;
 
     public static final byte PLUGIN_COUNT = 1;
     private final List<List<Runnable>> plugin = new ArrayList<>();
@@ -86,6 +79,12 @@ public class VrenMap {
             return sb.toString();
         }
     }
+    private static final class plugins{
+
+        public plugins(){
+
+        }
+    }
     public VrenMap(){
         resetSetting();
         for(int i = 0; i < SETTINGS_COUNT; i++){
@@ -133,14 +132,14 @@ public class VrenMap {
     }
     public void reset(){
         List<Runnable> temp = new ArrayList<>();
-        if(settings[CLEAR_STORAGE_IN_RESET]){
+        if(settings[VrenMapSettings.CLEAR_STORAGE_IN_RESET]){
             temp.add(() -> {
                 tagStorage.clear();
                 length = 0;
                 lengthTotal = 0;
             });
         }
-        if(settings[CLEAR_SETTING_IN_RESET]){
+        if(settings[VrenMapSettings.CLEAR_SETTING_IN_RESET]){
             temp.add(this::resetSetting);
         }
         for(int i = 0; i < temp.size(); i++){
@@ -148,10 +147,10 @@ public class VrenMap {
         }
     }
     public void resetSetting(){
-        settings[BINARY_VALUE_IN_REPORT] = false;//binary in report
-        settings[HEX_VALUE_IN_REPORT]    = true; //hex in report
-        settings[CLEAR_STORAGE_IN_RESET] = true; //reset the values stored
-        settings[CLEAR_SETTING_IN_RESET] = true; //reset the settings
+        settings[VrenMapSettings.BINARY_VALUE_IN_REPORT] = false;//binary in report
+        settings[VrenMapSettings.HEX_VALUE_IN_REPORT]    = true; //hex in report
+        settings[VrenMapSettings.CLEAR_STORAGE_IN_RESET] = true; //reset the values stored
+        settings[VrenMapSettings.CLEAR_SETTING_IN_RESET] = true; //reset the settings
     }
     public void enable(byte set){
         if(set < SETTINGS_COUNT) settings[set] = true;
@@ -162,7 +161,7 @@ public class VrenMap {
     }
     public void pluginsAdd(byte type, byte set, Runnable code){
         switch (type){
-            case SETTING_ACTIVE_RUNNABLE_PLUGIN:{
+            case VrenMapPlugins.SETTING_ACTIVE_RUNNABLE_PLUGIN:{
                 settingPluginsAdd(set, code);
             }break;
             default:{
@@ -243,8 +242,8 @@ public class VrenMap {
                     .append(System.lineSeparator());
             List<String[]> render = new ArrayList<>();
             render.add(new String[]{"Value Class Name ─► " + getClassName(currentValue), null});
-            if(settings[BINARY_VALUE_IN_REPORT]) render.add(new String[]{"Value in Binary Code", Arrays.toString(toBinary(currentValue))});
-            if(settings[HEX_VALUE_IN_REPORT]) render.add(new String[]{"Value in Hex", toHex(currentValue)});
+            if(settings[VrenMapSettings.BINARY_VALUE_IN_REPORT]) render.add(new String[]{"Value in Binary Code", Arrays.toString(toBinary(currentValue))});
+            if(settings[VrenMapSettings.HEX_VALUE_IN_REPORT]) render.add(new String[]{"Value in Hex", toHex(currentValue)});
 //            ([title], [content]) if [content] == null then its one line instead of two
 //            every one more setting is one more if statement
             for(int l = 0; l < render.size(); l++){
@@ -258,7 +257,7 @@ public class VrenMap {
             }
             sb.append(System.lineSeparator()).append(BLOB).append(System.lineSeparator());
         }
-        sb.delete(sb.length() - (BLOB.length() + System.lineSeparator().length()), sb.length());
+        sb.delete(sb.length() - (BLOB.length() + System.lineSeparator().length()*2), sb.length());
         return sb.toString();
     }
     public String getReport(){
