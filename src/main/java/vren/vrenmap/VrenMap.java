@@ -1,7 +1,6 @@
 package vren.vrenmap;
 
 import java.util.*;
-import java.util.function.Consumer;
 
 import static vren.vrendevtools.VrenDevTools.*;
 
@@ -15,14 +14,23 @@ public class VrenMap {
     private static final String horizontal = "──";
     private static final String endArrow = "└►";
 
+
     public static final byte BINARY_VALUE_IN_REPORT = 0;
     public static final byte HEX_VALUE_IN_REPORT = 1;
     public static final byte CLEAR_STORAGE_IN_RESET = 2;
     public static final byte CLEAR_SETTING_IN_RESET = 3;
 
-    public static final short settingsCount = 4;
-    private final boolean[] settings = new boolean[settingsCount];
-    private static final List<Consumer<Byte>> startUp = new ArrayList<>();
+    public static final byte SETTINGS_COUNT = 4;
+    private final boolean[] settings = new boolean[SETTINGS_COUNT];
+
+
+    public static final byte SETTING_ACTIVE_RUNNABLE_PLUGIN = 0;
+
+    public static final byte PLUGIN_COUNT = 1;
+    private final List<List<Runnable>> plugin = new ArrayList<>();
+
+
+    private static final List<Runnable> startUp = new ArrayList<>();
     private final HashMap<Object, Object> tagStorage = new HashMap<>();
     public int length = 0;
     public int lengthTotal = 0;
@@ -80,6 +88,9 @@ public class VrenMap {
     }
     public VrenMap(){
         resetSetting();
+        for(int i = 0; i < SETTINGS_COUNT; i++){
+            plugin.add(new ArrayList<>());
+        }
         Title.addAll(List.of(
                 "      .-----------------.      "   ,
                 "     /                   \\     "  ,
@@ -91,17 +102,33 @@ public class VrenMap {
                 "    \\        \\____/       /    " ,
                 "     \\___________________/     "
         ));
-        startUp.add(s -> {
+        startUp.add(() -> {
             //this is supposed to be extra binary setting execution
+        List<Runnable> copy = plugin.getFirst();
+            for(int i = 0; i < copy.size(); i++){
+                copy.get(i).run();
+            }
         });
-        startUp.add(s -> {
+        startUp.add(() -> {
             //this is supposed to be extra hex setting execution
+        List<Runnable> copy = plugin.get(1);
+            for(int i = 0; i < copy.size(); i++){
+                copy.get(i).run();
+            }
         });
-        startUp.add(s -> {
+        startUp.add(() -> {
             //this is supposed to be extra storage clear setting execution
+        List<Runnable> copy = plugin.get(2);
+            for(int i = 0; i < copy.size(); i++){
+                copy.get(i).run();
+            }
         });
-        startUp.add(s -> {
+        startUp.add(() -> {
             //this is supposed to be extra setting clear setting execution
+        List<Runnable> copy = plugin.get(3);
+            for(int i = 0; i < copy.size(); i++){
+                copy.get(i).run();
+            }
         });
     }
     public void reset(){
@@ -127,11 +154,25 @@ public class VrenMap {
         settings[CLEAR_SETTING_IN_RESET] = true; //reset the settings
     }
     public void enable(byte set){
-        if(set < settingsCount) settings[set] = true;
-        if(startUp.size() >= set) startUp.get(set).accept(set);
+        if(set < SETTINGS_COUNT) settings[set] = true;
+        if(startUp.size() > set) startUp.get(set).run();
     }
     public void disable(byte set){
-        if(set < settingsCount) settings[set] = false;
+        if(set < SETTINGS_COUNT) settings[set] = false;
+    }
+    public void pluginsAdd(byte type, byte set, Runnable code){
+        switch (type){
+            case SETTING_ACTIVE_RUNNABLE_PLUGIN:{
+                settingPluginsAdd(set, code);
+            }break;
+            default:{
+                throw new RuntimeException("Plugin type not found");
+            }
+        }
+    }
+    public void settingPluginsAdd(byte set, Runnable code){
+        if(code == null) throw new IllegalArgumentException("Null Runnable");
+        plugin.get(set).add(code);
     }
     public int[] put(Object tag){
         return put(tag, null, null);
@@ -261,4 +302,3 @@ public class VrenMap {
         return Objects.hash(tagStorage, Arrays.hashCode(settings), lengthTotal);
     }
 }
-
