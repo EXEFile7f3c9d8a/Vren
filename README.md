@@ -9,6 +9,56 @@ Vren is ready to be a software that's free-opensource-fast-light-replacement for
 # What's going on?
 So i am planed to make a browser core soon but however i am still working on the replacement for map.
 
+# Vren Map
+Here is how you use the VrenMap.
+
+THANKS <a href = "https://jitpack.io">jitpack</a> that i finally can let yall use it!
+
+### WARN:
+These snapshots contain the whole-newest thing!! it includes the extra website files, useless code and even bugs! 
+
+Use the <a href = "https://github.com/EXEFile7f3c9d8a/Vren/releases">release</a> for minimum size and maximum stable.
+
+However, if u want the newest thing and features you can copy the repositories and use these snapshots
+
+IF U GOT NO LIFE DOWNLOAD THE SNAPSHOT AND DELETE THINGS BY UR SELF.
+
+### Tips
+If you have other things in your build tools(Gradle/Maven) DONT REPLACE THE WHOLE THING, if you are a beginner ask if udk AI.
+
+### Gradle
+Add these code to your build.gradle
+```
+repositories {
+    mavenCentral()
+    maven { url 'https://jitpack.io' }
+}
+```
+```
+dependencies {
+    implementation 'com.github.EXEFile7f3c9d8a:Vren:main-SNAPSHOT'
+}
+```
+### Maven
+If you are maven add these to pom.xml
+```
+<repositories>
+    <repository>
+        <id>jitpack.io</id>
+        <url>https://jitpack.io</url>
+    </repository>
+</repositories>
+```
+```
+<dependencies>
+    <dependency>
+        <groupId>com.github.EXEFile7f3c9d8a</groupId>
+        <artifactId>Vren</artifactId>
+        <version>main-SNAPSHOT</version>
+    </dependency>
+</dependencies>
+```
+
 # Direction
 Make a format that can store millions of data with any type of variable
 
