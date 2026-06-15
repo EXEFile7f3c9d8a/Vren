@@ -20,7 +20,7 @@ public class VrenMap {
 
 
     public static final byte PLUGIN_COUNT = 1;
-    private final List<List<Runnable>> plugin = new ArrayList<>();
+    private final List<plugins> plugin = new ArrayList<>();
 
 
     private static final List<Runnable> startUp = new ArrayList<>();
@@ -80,15 +80,17 @@ public class VrenMap {
         }
     }
     private static final class plugins{
-
+        public List<Runnable> plugin = new ArrayList<>();
         public plugins(){
-
+        }
+        public void add(Runnable code){
+            plugin.add(code);
         }
     }
     public VrenMap(){
         resetSetting();
         for(int i = 0; i < SETTINGS_COUNT; i++){
-            plugin.add(new ArrayList<>());
+            plugin.add(new plugins());
         }
         Title.addAll(List.of(
                 "      .-----------------.      "   ,
@@ -103,28 +105,28 @@ public class VrenMap {
         ));
         startUp.add(() -> {
             //this is supposed to be extra binary setting execution
-        List<Runnable> copy = plugin.getFirst();
+        List<Runnable> copy = plugin.getFirst().plugin;
             for(int i = 0; i < copy.size(); i++){
                 copy.get(i).run();
             }
         });
         startUp.add(() -> {
             //this is supposed to be extra hex setting execution
-        List<Runnable> copy = plugin.get(1);
+        List<Runnable> copy = plugin.get(1).plugin;
             for(int i = 0; i < copy.size(); i++){
                 copy.get(i).run();
             }
         });
         startUp.add(() -> {
             //this is supposed to be extra storage clear setting execution
-        List<Runnable> copy = plugin.get(2);
+        List<Runnable> copy = plugin.get(2).plugin;
             for(int i = 0; i < copy.size(); i++){
                 copy.get(i).run();
             }
         });
         startUp.add(() -> {
             //this is supposed to be extra setting clear setting execution
-        List<Runnable> copy = plugin.get(3);
+        List<Runnable> copy = plugin.get(3).plugin;
             for(int i = 0; i < copy.size(); i++){
                 copy.get(i).run();
             }
