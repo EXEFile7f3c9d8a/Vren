@@ -24,7 +24,7 @@ However, if u want the newest thing and features you can copy the repositories a
 IF U GOT NO LIFE DOWNLOAD THE SNAPSHOT AND DELETE THINGS BY UR SELF.
 
 ### Tips
-If you have other things in your build tools(Gradle/Maven) DONT REPLACE THE WHOLE THING, if you are a beginner ask if udk AI.
+If you have other things in your build tools(Gradle/Maven) DONT REPLACE THE WHOLE THING, if you are a beginner ask AI if udk.
 
 ### Gradle
 Add these code to your build.gradle
