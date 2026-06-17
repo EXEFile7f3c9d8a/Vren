@@ -1,8 +1,10 @@
 package vren.vrenmap;
 
 public interface VrenMapSettings {
-    byte BINARY_VALUE_IN_REPORT = 0;
-    byte HEX_VALUE_IN_REPORT    = 1;
-    byte CLEAR_STORAGE_IN_RESET = 2;
-    byte CLEAR_SETTING_IN_RESET = 3;
+    VrenMapSettings BINARY_VALUE_IN_REPORT = () -> (byte)0;
+    VrenMapSettings HEX_VALUE_IN_REPORT    = () -> (byte)1;
+    VrenMapSettings CLEAR_STORAGE_IN_RESET = () -> (byte)2;
+    VrenMapSettings CLEAR_SETTING_IN_RESET = () -> (byte)3;
+
+    byte getValue();
 }

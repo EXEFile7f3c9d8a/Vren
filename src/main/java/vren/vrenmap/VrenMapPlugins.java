@@ -1,5 +1,7 @@
 package vren.vrenmap;
 
-public interface VrenMapPlugins {
-    byte SETTING_ACTIVE_RUNNABLE_PLUGIN = 0;
+public interface VrenMapPlugins<T>{
+    VrenMapPlugins<VrenMapSettings> SETTING_ACTIVE_RUNNABLE_PLUGIN = () -> (byte) 0;
+
+    byte getValue();
 }
