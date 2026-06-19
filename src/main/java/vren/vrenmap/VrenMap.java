@@ -23,10 +23,9 @@ public class VrenMap {
 
     private static final byte SETTING_ACTIVE_RUNNABLE_PLUGIN = 0;
     public static final byte PLUGIN_COUNT = 1;
-    private final List<plugins> plugin = new ArrayList<>();
+    private final List<List<plugins>> plugin = new ArrayList<>();
 
 
-    private static final List<Runnable> startUp = new ArrayList<>();
     private final HashMap<Object, Object> tagStorage = new HashMap<>();
     public int length = 0;
     public int lengthTotal = 0;
@@ -84,16 +83,40 @@ public class VrenMap {
     }
     private static final class plugins{
         public List<Runnable> plugin = new ArrayList<>();
-        public plugins(){
+        public List<Runnable> pluginEX = new ArrayList<>();
+        public plugins(){//not yet
+        }
+        public plugins(Runnable code){
+            add(code);
         }
         public void add(Runnable code){
+            add(code, null);
+        }
+        public void add(Runnable code, Runnable exWay){
             plugin.add(code);
+            if(exWay == null){
+                pluginEX.add(() -> {
+                    for(int i = 0; i < this.plugin.size(); i++){
+                        this.plugin.get(i).run();
+                    }
+                });
+            }else pluginEX.add(exWay);
+        }
+        public void run(){
+            for(int i = 0; i < pluginEX.size(); i++){
+                pluginEX.get(i).run();
+            }
         }
     }
     public VrenMap(){
         resetSetting();
-        for(int i = 0; i < SETTINGS_COUNT; i++){
-            plugin.add(new plugins());
+        {
+            for(int i = 0; i < PLUGIN_COUNT; i++){
+                plugin.add(new ArrayList<>());
+            }
+            for(int i = 0; i < SETTINGS_COUNT; i++){
+                plugin.get(VrenMap.SETTING_ACTIVE_RUNNABLE_PLUGIN).add(new plugins());
+            }
         }
         Title.addAll(List.of(
                 "      .-----------------.      "   ,
@@ -106,34 +129,6 @@ public class VrenMap {
                 "    \\        \\____/       /    " ,
                 "     \\___________________/     "
         ));
-        startUp.add(() -> {
-            //this is supposed to be extra binary setting execution
-        List<Runnable> copy = plugin.getFirst().plugin;
-            for(int i = 0; i < copy.size(); i++){
-                copy.get(i).run();
-            }
-        });
-        startUp.add(() -> {
-            //this is supposed to be extra hex setting execution
-        List<Runnable> copy = plugin.get(1).plugin;
-            for(int i = 0; i < copy.size(); i++){
-                copy.get(i).run();
-            }
-        });
-        startUp.add(() -> {
-            //this is supposed to be extra storage clear setting execution
-        List<Runnable> copy = plugin.get(2).plugin;
-            for(int i = 0; i < copy.size(); i++){
-                copy.get(i).run();
-            }
-        });
-        startUp.add(() -> {
-            //this is supposed to be extra setting clear setting execution
-        List<Runnable> copy = plugin.get(3).plugin;
-            for(int i = 0; i < copy.size(); i++){
-                copy.get(i).run();
-            }
-        });
     }
     public void reset(){
         List<Runnable> temp = new ArrayList<>();
@@ -160,7 +155,7 @@ public class VrenMap {
     public void enable(VrenMapSettings set){
         byte temp = set.getValue();
         if(temp < SETTINGS_COUNT) settings[temp] = true;
-        if(startUp.size() > temp) startUp.get(temp).run();
+        if(plugin.get(VrenMap.SETTING_ACTIVE_RUNNABLE_PLUGIN).size() > temp) plugin.get(VrenMap.SETTING_ACTIVE_RUNNABLE_PLUGIN).get(temp).run();
     }
     public void disable(VrenMapSettings set){
         byte temp = set.getValue();
@@ -169,9 +164,10 @@ public class VrenMap {
     public <T> void pluginsAdd(VrenMapPlugins<T> type, T set, Runnable code){
         byte temp = type.getValue();
         switch (temp){
-            case VrenMap.SETTING_ACTIVE_RUNNABLE_PLUGIN:{
+            case VrenMap.SETTING_ACTIVE_RUNNABLE_PLUGIN: {
                 pluginsAdd((VrenMapSettings) set, code);
-            }break;
+                break;
+            }
             default:{
                 throw new RuntimeException("Plugin type not found");
             }
@@ -179,7 +175,7 @@ public class VrenMap {
     }
     public void pluginsAdd(VrenMapSettings set, Runnable code){
         if(code == null) throw new IllegalArgumentException("Null Runnable");
-        plugin.get(set.getValue()).add(code);
+        plugin.get(VrenMap.SETTING_ACTIVE_RUNNABLE_PLUGIN).get(set.getValue()).add(code);
     }
     public int[] put(Object tag){
         return put(tag, null, null);
