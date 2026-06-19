@@ -18,7 +18,11 @@ public class VrenMap {
     private static final byte HEX_VALUE_IN_REPORT    = 1;
     private static final byte CLEAR_STORAGE_IN_RESET = 2;
     private static final byte CLEAR_SETTING_IN_RESET = 3;
-    public static final byte SETTINGS_COUNT = 4;
+    private static final byte COMPARE_SETTINGS_IN_EQUALS = 4;
+    private static final byte COMPARE_PLUGINS_IN_EQUALS  = 5;
+    private static final byte INCLUDE_SETTINGS_IN_HASHCODE = 6;
+    private static final byte INCLUDE_PLUGINS_IN_HASHCODE  = 7;
+    public static final byte SETTINGS_COUNT = 8;
     private final boolean[] settings = new boolean[SETTINGS_COUNT];
 
     private static final byte SETTING_ACTIVE_RUNNABLE_PLUGIN = 0;
@@ -140,10 +144,15 @@ public class VrenMap {
         }
     }
     public void resetSetting(){
-        settings[VrenMapSettings.BINARY_VALUE_IN_REPORT.getValue()] = false;//binary in report
-        settings[VrenMapSettings.HEX_VALUE_IN_REPORT   .getValue()] = true; //hex in report
-        settings[VrenMapSettings.CLEAR_STORAGE_IN_RESET.getValue()] = true; //reset the values stored
-        settings[VrenMapSettings.CLEAR_SETTING_IN_RESET.getValue()] = true; //reset the settings
+        settings[VrenMap.BINARY_VALUE_IN_REPORT] = false;//binary in report
+        settings[VrenMap.HEX_VALUE_IN_REPORT]    = true; //hex in report
+        settings[VrenMap.CLEAR_STORAGE_IN_RESET] = true; //reset the values stored
+        settings[VrenMap.CLEAR_SETTING_IN_RESET] = true; //reset the settings
+        settings[VrenMap.COMPARE_SETTINGS_IN_EQUALS] = false;
+        settings[VrenMap.COMPARE_PLUGINS_IN_EQUALS]  = false;
+        settings[VrenMap.INCLUDE_SETTINGS_IN_HASHCODE] = false;
+        settings[VrenMap.INCLUDE_PLUGINS_IN_HASHCODE]  = false;
+
     }
     public void enable(VrenMapSettings set){
         byte temp = set.getValue();
@@ -173,14 +182,14 @@ public class VrenMap {
     public int[] put(Object tag){
         return put(tag, null, null);
     }
-    public int[] put(Object tag, Object value){
+    public int put(Object tag, Object value){
         return put(tag, null,  value);
     }
     public int[] put(Object tag, Object[] value){
         return put(tag, null,  value);
     }
-    public int[] put(Object tag, Object valueName, Object value){
-        return put(tag, new Object[]{valueName}, new Object[]{value});
+    public int put(Object tag, Object valueName, Object value){
+        return put(tag, new Object[]{valueName}, new Object[]{value})[0];
     }
     public int[] put(Object tag, Object[] valueName, Object[] value){
         if(tag == null)throw new IllegalArgumentException("Null tag");
@@ -188,18 +197,20 @@ public class VrenMap {
         tagStorage.put(tag, temp);
         return temp.add(this, valueName, value);
     }
-    public int[] add(Object tag, Object value){
+    public int add(Object tag, Object value){
         return add(tag, null, value);
     }
     public int[] add(Object tag, Object[] value){
         return add(tag, null, value);
     }
-    public int[] add(Object tag, Object valueName, Object value){
-        return add(tag, new Object[]{valueName}, new Object[]{value});
+    public int add(Object tag, Object valueName, Object value){
+        return add(tag, new Object[]{valueName}, new Object[]{value})[0];
     }
     public int[] add(Object tag, Object[] valueName, Object[] value){
         if(tag == null)throw new IllegalArgumentException("Null tag");
-        return ((Tags)tagStorage.get(tag)).add(this, valueName, value);
+        Tags tags = (Tags)tagStorage.get(tag);
+        if(tags == null)return null;
+        return tags.add(this, valueName, value);
     }
     public void setValue(Object tag, int hash, Object value){
         setValue(tag, hash, null, value);
@@ -221,7 +232,8 @@ public class VrenMap {
     public Object getValueOf(Object tag, int hash, String name){
         if(hash == 0 && name == null) return getTag(tag);
         Tags tags = (Tags)tagStorage.get(tag);
-        return (tags).Value.get(Arrays.asList(name, hash));
+        if(tags == null)return null;
+        return tags.Value.get(Arrays.asList(name, hash));
     }
     public String getTag(Object tag){
         return ((Tags)tagStorage.get(tag)).toString();
@@ -307,6 +319,18 @@ public class VrenMap {
     }
     @Override
     public int hashCode(){
-        return Objects.hash(tagStorage, Arrays.hashCode(settings), lengthTotal);
+        int temp = 0;
+        if(this.settings[INCLUDE_SETTINGS_IN_HASHCODE])temp += Arrays.hashCode(settings);
+        if(this.settings[INCLUDE_PLUGINS_IN_HASHCODE]) temp += plugin.hashCode();
+        return Objects.hash(tagStorage, temp, lengthTotal);
+    }
+    @Override
+    public boolean equals(Object vm){
+        if(this == vm)return true;
+        if(vm == null)return false;
+        if(!vm.getClass().getName().equals(this.getClass().getName()))return false;
+        if(this.settings[COMPARE_SETTINGS_IN_EQUALS]&&!Arrays.equals(((VrenMap)vm).settings, this.settings))return false;
+        if(this.settings[COMPARE_PLUGINS_IN_EQUALS]&&((VrenMap)vm).plugin != this.plugin)return false;
+        return Objects.equals(((VrenMap) vm).tagStorage, this.tagStorage);
     }
 }

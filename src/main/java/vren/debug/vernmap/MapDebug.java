@@ -10,23 +10,18 @@ public class MapDebug {
 //        This class is just for testing the map and have nothing to do with other code
 //        And there is some of my temporary test I forget to delete :p
         VrenMap obj = new VrenMap();
+        System.out.println(obj.hashCode());
         String temp = "VrenTest_1234567890_ABCDEFGHIJKLMNOPQRSTUVWXYZ_abcdefghijklmnopqrstuvwxyz_~!@#$%^&*()_+{}|:<>?-=[]\\\\;',./\"ΩДאم中あ가कአ\ud83d\ude80";
-        int[] hash = obj.put("Value", "StringTest", temp);
-        int[] hash2 = obj.put("value", "StringTest", temp);
-        System.out.println(obj.getTagReport("Value"));
-        System.out.println(System.lineSeparator());
-        System.out.println(System.lineSeparator());
+        int hash = obj.put("Value", "StringTest", temp);
+//        int hash2 = obj.add("value", "StringTest", temp); make crash bcs itz v instead of V
+        int hash2 = obj.add("Value", "StringTest", temp);
         obj.disable(VrenMapSettings.HEX_VALUE_IN_REPORT);
         obj.enable(VrenMapSettings.HEX_VALUE_IN_REPORT);
         obj.enable(VrenMapSettings.BINARY_VALUE_IN_REPORT);
         obj.add("Value", new Object[]{"1", "2"}, new Object[]{"1-", "2-"});
-        System.out.println(obj.getTagReport("Value"));
-        System.out.println(System.lineSeparator());
-        System.out.println(obj.getValueOf("Value", "StringTest"));
-        System.out.println(hash[0]);
-        System.out.println(obj.getValueOf("Value", hash[0], "StringTest"));
-        System.out.println(obj.getReport());
-
+        System.out.println(obj.getValueOf("Value", hash,"StringTest"));
+        System.out.println(hash);
+        System.out.println(obj.getValueOf("value", hash2, "StringTest"));
         obj.pluginsAdd(VrenMapPlugins.SETTING_ACTIVE_RUNNABLE_PLUGIN, VrenMapSettings.HEX_VALUE_IN_REPORT, () -> {
             System.out.println("Successful");
         });
