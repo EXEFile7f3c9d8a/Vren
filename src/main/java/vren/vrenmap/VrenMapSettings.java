@@ -9,5 +9,6 @@ public interface VrenMapSettings {
     VrenMapSettings COMPARE_PLUGINS_IN_EQUALS  = () -> (byte)5;
     VrenMapSettings INCLUDE_SETTINGS_IN_HASHCODE = () -> (byte)6;
     VrenMapSettings INCLUDE_PLUGINS_IN_HASHCODE  = () -> (byte)7;
+
     byte getValue();
 }

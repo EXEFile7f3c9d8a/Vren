@@ -320,7 +320,7 @@ public class VrenMap {
     @Override
     public int hashCode(){
         int temp = 0;
-        if(this.settings[INCLUDE_SETTINGS_IN_HASHCODE])temp += Arrays.hashCode(settings);
+        if(this.settings[INCLUDE_SETTINGS_IN_HASHCODE])temp += Arrays.hashCode(this.settings);
         if(this.settings[INCLUDE_PLUGINS_IN_HASHCODE]) temp += plugin.hashCode();
         return Objects.hash(tagStorage, temp, lengthTotal);
     }
