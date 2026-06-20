@@ -1,7 +1,6 @@
 package vren.vrenmap;
 
 import java.util.*;
-import java.util.function.Consumer;
 
 import static vren.vrendevtools.VrenDevTools.*;
 
@@ -15,25 +14,31 @@ public class VrenMap {
     private static final String horizontal = "──";
     private static final String endArrow = "└►";
 
-    public static final byte BINARY_VALUE_IN_REPORT = 0;
-    public static final byte HEX_VALUE_IN_REPORT = 1;
-    public static final byte CLEAR_STORAGE_IN_RESET = 2;
-    public static final byte CLEAR_SETTING_IN_RESET = 3;
+    private static final byte BINARY_VALUE_IN_REPORT = 0;
+    private static final byte HEX_VALUE_IN_REPORT    = 1;
+    private static final byte CLEAR_STORAGE_IN_RESET = 2;
+    private static final byte CLEAR_SETTING_IN_RESET = 3;
+    private static final byte COMPARE_SETTINGS_IN_EQUALS = 4;
+    private static final byte COMPARE_PLUGINS_IN_EQUALS  = 5;
+    private static final byte INCLUDE_SETTINGS_IN_HASHCODE = 6;
+    private static final byte INCLUDE_PLUGINS_IN_HASHCODE  = 7;
+    public static final byte SETTINGS_COUNT = 8;
+    private final boolean[] settings = new boolean[SETTINGS_COUNT];
 
-    public static final short settingsCount = 4;
-    private final boolean[] settings = new boolean[settingsCount];
-    private static final List<Consumer<Byte>> startUp = new ArrayList<>();
+    private static final byte SETTING_ACTIVE_RUNNABLE_PLUGIN = 0;
+    public static final byte PLUGIN_COUNT = 1;
+    //    Structure/Format: plugin<settings active plugin<plugins<plugin, pluginEX>>,...
+    private final List<List<plugins>> plugin = new ArrayList<>();
+
+
     private final HashMap<Object, Object> tagStorage = new HashMap<>();
-    public int length = 0;
     public int lengthTotal = 0;
     private static final class Tags{
-//      Format: HashMap<List(OBJValueName, OBJValueHash), OBJValue>
-        public int length = 0;
+        //      Format: HashMap<List(OBJValueName, OBJValueHash), OBJValue>
         public HashMap<List<Object>, Object> Value = new HashMap<>();
         public Object LockTag = null;
-        public Tags(VrenMap clas, Object tag, Object[] valueName, Object[] value){
+        public Tags(Object tag){
             if(tag != null)this.LockTag = tag;
-            add(clas, valueName, value);
         }
         public int[] add(VrenMap clas, Object[] valueName, Object[] value){
             int[] tempHash;
@@ -44,25 +49,21 @@ public class VrenMap {
                     this.Value.put(Arrays.asList(null, temp), value[i]);
                     tempHash[i] = temp;
                     clas.lengthTotal++;
-                    this.length++;
                 }
             }else if(value == null){
-                clas.length++;
                 return new int[]{0};
             }else{
                 tempHash = new int[value.length];
                 for(int i = 0; i < value.length; i++){
                     int temp = Objects.hash(value[i]);
-                    this.Value.put(Arrays.asList(valueName[i], Objects.hash(value[i])), value[i]);
+                    this.Value.put(Arrays.asList(valueName[i], temp), value[i]);
                     tempHash[i] = temp;
                     clas.lengthTotal++;
-                    this.length++;
                 }
             }
-            clas.length++;
             return tempHash;
         }
-//        Format: <tagClassName,tagToHex>|[valueName,valueHash,valueToHex]|...
+        //        Format: <tagClassName,tagToHex>|[valueName,valueHash,valueToHex]|...
         @Override
         public String toString() {
             StringBuilder sb = new StringBuilder();
@@ -74,13 +75,47 @@ public class VrenMap {
                 Object currentValue = entry.getValue();
                 sb.append("[").append(currentKey.getFirst()).append(",").append(currentKey.get(1)).append(",").append(toHex(currentValue)).append("]|");
             }
-            sb.deleteCharAt(!sb.isEmpty() && sb.charAt(sb.length()-1) == '|' ? sb.length() - 1 :sb.length());
+            sb.deleteCharAt(!sb.isEmpty() && sb.charAt(sb.length()-1) == '|' ? sb.length() - 1 : sb.length());
             return sb.toString();
+        }
+    }
+    private static final class plugins{
+        public List<Runnable> plugin = new ArrayList<>();
+        public List<Runnable> pluginEX = new ArrayList<>();
+        public plugins(){//not yet
+        }
+        public plugins(Runnable code){
+            add(code);
+        }
+        public void add(Runnable code){
+            add(code, null);
+        }
+        public void add(Runnable code, Runnable exWay){
+            plugin.add(code);
+            if(exWay == null){
+                pluginEX.add(() -> {
+                    for(int i = 0; i < this.plugin.size(); i++){
+                        this.plugin.get(i).run();
+                    }
+                });
+            }else pluginEX.add(exWay);
+        }
+        public void run(){
+            for(int i = 0; i < pluginEX.size(); i++){
+                pluginEX.get(i).run();
+            }
         }
     }
     public VrenMap(){
         resetSetting();
-        reset();
+        {
+            for(int i = 0; i < PLUGIN_COUNT; i++){
+                plugin.add(new ArrayList<>());
+            }
+            for(int i = 0; i < SETTINGS_COUNT; i++){
+                plugin.get(VrenMap.SETTING_ACTIVE_RUNNABLE_PLUGIN).add(new plugins());
+            }
+        }
         Title.addAll(List.of(
                 "      .-----------------.      "   ,
                 "     /                   \\     "  ,
@@ -92,29 +127,16 @@ public class VrenMap {
                 "    \\        \\____/       /    " ,
                 "     \\___________________/     "
         ));
-        startUp.add(s -> {
-            //this is supposed to be extra binary setting execution
-        });
-        startUp.add(s -> {
-            //this is supposed to be extra hex setting execution
-        });
-        startUp.add(s -> {
-            //this is supposed to be extra storage clear setting execution
-        });
-        startUp.add(s -> {
-            //this is supposed to be extra setting clear setting execution
-        });
     }
     public void reset(){
         List<Runnable> temp = new ArrayList<>();
-        if(settings[CLEAR_STORAGE_IN_RESET]){
+        if(settings[VrenMapSettings.CLEAR_STORAGE_IN_RESET.getValue()]){
             temp.add(() -> {
                 tagStorage.clear();
-                length = 0;
                 lengthTotal = 0;
             });
         }
-        if(settings[CLEAR_SETTING_IN_RESET]){
+        if(settings[VrenMapSettings.CLEAR_SETTING_IN_RESET.getValue()]){
             temp.add(this::resetSetting);
         }
         for(int i = 0; i < temp.size(); i++){
@@ -122,36 +144,72 @@ public class VrenMap {
         }
     }
     public void resetSetting(){
-        settings[BINARY_VALUE_IN_REPORT] = false;//binary in report
-        settings[HEX_VALUE_IN_REPORT]    = true; //hex in report
-        settings[CLEAR_STORAGE_IN_RESET] = true; //reset the values stored
-        settings[CLEAR_SETTING_IN_RESET] = true; //reset the settings
+        settings[VrenMap.BINARY_VALUE_IN_REPORT] = false;//binary in report
+        settings[VrenMap.HEX_VALUE_IN_REPORT]    = true; //hex in report
+        settings[VrenMap.CLEAR_STORAGE_IN_RESET] = true; //reset the values stored
+        settings[VrenMap.CLEAR_SETTING_IN_RESET] = true; //reset the settings
+        settings[VrenMap.COMPARE_SETTINGS_IN_EQUALS] = false;
+        settings[VrenMap.COMPARE_PLUGINS_IN_EQUALS]  = false;
+        settings[VrenMap.INCLUDE_SETTINGS_IN_HASHCODE] = false;
+        settings[VrenMap.INCLUDE_PLUGINS_IN_HASHCODE]  = false;
+
     }
-    public void enable(byte set){
-        if(set < settingsCount) settings[set] = true;
-        if(startUp.size() >= set) startUp.get(set).accept(set);
+    public void enable(VrenMapSettings set){
+        byte temp = set.getValue();
+        if(temp < SETTINGS_COUNT) settings[temp] = true;
+        if(plugin.get(VrenMap.SETTING_ACTIVE_RUNNABLE_PLUGIN).size() > temp) plugin.get(VrenMap.SETTING_ACTIVE_RUNNABLE_PLUGIN).get(temp).run();
     }
-    public void disable(byte set){
-        if(set < settingsCount) settings[set] = false;
+    public void disable(VrenMapSettings set){
+        byte temp = set.getValue();
+        if(temp < SETTINGS_COUNT) settings[temp] = false;
+    }
+    public <T> void pluginsAdd(VrenMapPlugins<T> type, T set, Runnable code){
+        byte temp = type.getValue();
+        switch (temp){
+            case VrenMap.SETTING_ACTIVE_RUNNABLE_PLUGIN: {
+                pluginsAdd((VrenMapSettings) set, code);
+                break;
+            }
+            default:{
+                throw new RuntimeException("Plugin type not found");
+            }
+        }
+    }
+    public void pluginsAdd(VrenMapSettings set, Runnable code){
+        if(code == null) throw new IllegalArgumentException("Null Runnable");
+        plugin.get(VrenMap.SETTING_ACTIVE_RUNNABLE_PLUGIN).get(set.getValue()).add(code);
     }
     public int[] put(Object tag){
         return put(tag, null, null);
     }
+    public int put(Object tag, Object value){
+        return put(tag, null,  value);
+    }
     public int[] put(Object tag, Object[] value){
         return put(tag, null,  value);
     }
-    public int[] put(Object tag, Object valueName, Object value){
-        return put(tag, new Object[]{valueName}, new Object[]{value});
+    public int put(Object tag, Object valueName, Object value){
+        return put(tag, new Object[]{valueName}, new Object[]{value})[0];
     }
     public int[] put(Object tag, Object[] valueName, Object[] value){
         if(tag == null)throw new IllegalArgumentException("Null tag");
-        Tags temp = new Tags(this, tag, null, null);
-        int[] tempHash = temp.add(this, valueName, value);
+        Tags temp = new Tags(tag);
         tagStorage.put(tag, temp);
-        return tempHash;
+        return temp.add(this, valueName, value);
+    }
+    public int add(Object tag, Object value){
+        return add(tag, null, value);
+    }
+    public int[] add(Object tag, Object[] value){
+        return add(tag, null, value);
+    }
+    public int add(Object tag, Object valueName, Object value){
+        return add(tag, new Object[]{valueName}, new Object[]{value})[0];
     }
     public int[] add(Object tag, Object[] valueName, Object[] value){
-        return ((Tags)tagStorage.get(tag)).add(this, valueName, value);
+        if(tag == null)throw new IllegalArgumentException("Null tag");
+        try{return ((Tags)tagStorage.get(tag)).add(this, valueName, value);
+        }catch (NullPointerException e){throw new NullPointerException("Tag not found");}
     }
     public void setValue(Object tag, int hash, Object value){
         setValue(tag, hash, null, value);
@@ -173,12 +231,14 @@ public class VrenMap {
     public Object getValueOf(Object tag, int hash, String name){
         if(hash == 0 && name == null) return getTag(tag);
         Tags tags = (Tags)tagStorage.get(tag);
-        return (tags).Value.get(Arrays.asList(name, hash));
+        if(tags == null)return null;
+        return tags.Value.get(Arrays.asList(name, hash));
     }
     public String getTag(Object tag){
         return ((Tags)tagStorage.get(tag)).toString();
     }
     public String getTagReport(Object tag){
+        if(tag == null)throw new NullPointerException("Tag is null");
         if(tagStorage.get(tag) == null)return null;
         Map<List<Object>, Object> tagCopy = ((Tags)tagStorage.get(tag)).Value;
         if(tagCopy.isEmpty()) return null;
@@ -203,8 +263,8 @@ public class VrenMap {
                     .append(System.lineSeparator());
             List<String[]> render = new ArrayList<>();
             render.add(new String[]{"Value Class Name ─► " + getClassName(currentValue), null});
-            if(settings[BINARY_VALUE_IN_REPORT]) render.add(new String[]{"Value in Binary Code", Arrays.toString(toBinary(currentValue))});
-            if(settings[HEX_VALUE_IN_REPORT]) render.add(new String[]{"Value in Hex", toHex(currentValue)});
+            if(settings[VrenMapSettings.BINARY_VALUE_IN_REPORT.getValue()]) render.add(new String[]{"Value in Binary Code", Arrays.toString(toBinary(currentValue))});
+            if(settings[VrenMapSettings.HEX_VALUE_IN_REPORT.getValue()]) render.add(new String[]{"Value in Hex", toHex(currentValue)});
 //            ([title], [content]) if [content] == null then its one line instead of two
 //            every one more setting is one more if statement
             for(int l = 0; l < render.size(); l++){
@@ -218,7 +278,7 @@ public class VrenMap {
             }
             sb.append(System.lineSeparator()).append(BLOB).append(System.lineSeparator());
         }
-        sb.delete(sb.length() - (BLOB.length() + System.lineSeparator().length()), sb.length());
+        sb.delete(sb.length() - (BLOB.length() + System.lineSeparator().length()*2), sb.length());
         return sb.toString();
     }
     public String getReport(){
@@ -235,13 +295,13 @@ public class VrenMap {
         return sb.toString();
     }
     public int size(){
-        return tagStorage.size() != length ? tagStorage.size() : length;
+        return tagStorage.size();
     }
     public int totalSize(){
         return lengthTotal;
     }
     public int tagSize(Object tag){
-        return ((Tags)tagStorage.get(tag)).length;
+        return ((Tags)tagStorage.get(tag)).Value.size();
     }
     @Override
     public String toString(){
@@ -259,7 +319,19 @@ public class VrenMap {
     }
     @Override
     public int hashCode(){
-        return Objects.hash(tagStorage, Arrays.hashCode(settings), lengthTotal);
+        int temp = 0;
+        if(this.settings[INCLUDE_SETTINGS_IN_HASHCODE])temp += Arrays.hashCode(this.settings);
+        if(this.settings[INCLUDE_PLUGINS_IN_HASHCODE]) temp += plugin.hashCode();
+        return Objects.hash(tagStorage, temp, lengthTotal);
+    }
+    //return null;
+    @Override
+    public boolean equals(Object vm){
+        if(this == vm)return true;
+        if(vm == null)return false;
+        if(!vm.getClass().getName().equals(this.getClass().getName()))return false;
+        if(this.settings[COMPARE_SETTINGS_IN_EQUALS]&&!Arrays.equals(((VrenMap)vm).settings, this.settings))return false;
+        if(this.settings[COMPARE_PLUGINS_IN_EQUALS]&&((VrenMap)vm).plugin != this.plugin)return false;
+        return Objects.equals(((VrenMap) vm).tagStorage, this.tagStorage);
     }
 }
-
