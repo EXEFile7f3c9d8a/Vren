@@ -4,24 +4,18 @@ plugins {
     id 'org.openjfx.javafxplugin' version '0.1.0'
 }
 
-group = 'org.vren'
-version = '1.0.0.003'
+group = 'vren'
+version = '1.0.1.000-release'
+
 
 dependencies {
     testImplementation platform('org.junit:junit-bom:5.10.0')
     testImplementation 'org.junit.jupiter:junit-jupiter'
 }
 
-java {
-    toolchain {
-        languageVersion = JavaLanguageVersion.of(21)
-    }
-}
-
-tasks.withType(JavaExec).configureEach {
-    doFirst {
-        jvmArgs += ['--module-path', classpath.asPath, '--add-modules', 'javafx.controls,javafx.fxml']
-    }
+javafx {
+    version = "21"
+    modules = [ 'javafx.controls', 'javafx.fxml' ]
 }
 
 tasks.withType(JavaCompile).configureEach {

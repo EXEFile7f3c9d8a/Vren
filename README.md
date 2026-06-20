@@ -20,4 +20,4 @@ Here is the command you need for cloning this
 
 # Links
 
-Doc: <a href = "https://exefile7f3c9d8a.github.io/Vren/docs/VrenMapFormatDoc/VrenMapFormatDoc.html">Vren Map</a>
+Doc: <a href = "https://vren.pages.dev/">Vren Map</a>
