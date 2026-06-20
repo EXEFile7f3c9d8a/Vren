@@ -208,9 +208,8 @@ public class VrenMap {
     }
     public int[] add(Object tag, Object[] valueName, Object[] value){
         if(tag == null)throw new IllegalArgumentException("Null tag");
-        Tags tags = (Tags)tagStorage.get(tag);
-        if(tags == null)return null;
-        return tags.add(this, valueName, value);
+        try{return ((Tags)tagStorage.get(tag)).add(this, valueName, value);
+        }catch (NullPointerException e){throw new NullPointerException("Tag not found");}
     }
     public void setValue(Object tag, int hash, Object value){
         setValue(tag, hash, null, value);
@@ -239,6 +238,7 @@ public class VrenMap {
         return ((Tags)tagStorage.get(tag)).toString();
     }
     public String getTagReport(Object tag){
+        if(tag == null)throw new NullPointerException("Tag is null");
         if(tagStorage.get(tag) == null)return null;
         Map<List<Object>, Object> tagCopy = ((Tags)tagStorage.get(tag)).Value;
         if(tagCopy.isEmpty()) return null;
@@ -324,6 +324,7 @@ public class VrenMap {
         if(this.settings[INCLUDE_PLUGINS_IN_HASHCODE]) temp += plugin.hashCode();
         return Objects.hash(tagStorage, temp, lengthTotal);
     }
+    //return null;
     @Override
     public boolean equals(Object vm){
         if(this == vm)return true;
