@@ -1,4 +1,4 @@
 package vren.vrenbrowsercore;
 
-public class VrenBrowserCore {
+public class Render {
 }

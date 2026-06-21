@@ -1,4 +1,4 @@
-package vren.debug.vernbrowsercore;
+package vren.debug.vrenbrowsercore;
 
 import javafx.application.Application;
 import javafx.scene.Scene;
@@ -9,10 +9,10 @@ import javafx.stage.Stage;
 
 public class UILauncherTest extends Application {
     public static void main(String[] args){
-        javafx.application.Application.launch(vren.debug.vernbrowsercore.UILauncherTest.class, args);
+        launch(args);
     }
-
-    public void start(Stage primaryStage) throws Exception{
+    @Override
+    public void start(Stage primaryStage){
         Label Text = new Label("Welcome to Vren");
         Button button = new Button("Button for clicking");
         button.setOnAction(event -> Text.setText("Button Clicked"));
