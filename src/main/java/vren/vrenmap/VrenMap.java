@@ -32,7 +32,6 @@ public class VrenMap {
 
 
     private final HashMap<Object, Object> tagStorage = new HashMap<>();
-    public int lengthTotal = 0;
     private static final class Tags{
 //      Format: HashMap<List(OBJValueName, OBJValueHash), OBJValue>
         public HashMap<List<Object>, Object> Value = new HashMap<>();
@@ -40,7 +39,7 @@ public class VrenMap {
         public Tags(Object tag){
             if(tag != null)this.LockTag = tag;
         }
-        public int[] add(VrenMap clas, Object[] valueName, Object[] value){
+        public int[] add(Object[] valueName, Object[] value){
             int[] tempHash;
             if(valueName == null && value != null){
                 tempHash = new int[value.length];
@@ -48,7 +47,6 @@ public class VrenMap {
                     int temp = value[i] != null ? Objects.hash(value[i]) : 0;
                     this.Value.put(Arrays.asList(null, temp), value[i]);
                     tempHash[i] = temp;
-                    clas.lengthTotal++;
                 }
             }else if(value == null){
                 return new int[]{0};
@@ -58,7 +56,6 @@ public class VrenMap {
                     int temp = Objects.hash(value[i]);
                     this.Value.put(Arrays.asList(valueName[i], temp), value[i]);
                     tempHash[i] = temp;
-                    clas.lengthTotal++;
                 }
             }
             return tempHash;
@@ -123,7 +120,7 @@ public class VrenMap {
                 "   |\\--[___]---------[___]/|   "   ,
                 "   |                       |   "  ,
                 "   |                       |   "   ,
-                "   |               /       |   "   ,
+                "   |                       |   "   ,
                 "    \\        \\____/       /    " ,
                 "     \\___________________/     "
         ));
@@ -131,10 +128,7 @@ public class VrenMap {
     public void reset(){
         List<Runnable> temp = new ArrayList<>();
         if(settings[VrenMapSettings.CLEAR_STORAGE_IN_RESET.getValue()]){
-            temp.add(() -> {
-                tagStorage.clear();
-                lengthTotal = 0;
-            });
+            temp.add(tagStorage::clear);
         }
         if(settings[VrenMapSettings.CLEAR_SETTING_IN_RESET.getValue()]){
             temp.add(this::resetSetting);
@@ -195,7 +189,7 @@ public class VrenMap {
         if(tag == null)throw new IllegalArgumentException("Null tag");
         Tags temp = new Tags(tag);
         tagStorage.put(tag, temp);
-        return temp.add(this, valueName, value);
+        return temp.add(valueName, value);
     }
     public int add(Object tag, Object value){
         return add(tag, null, value);
@@ -208,7 +202,7 @@ public class VrenMap {
     }
     public int[] add(Object tag, Object[] valueName, Object[] value){
         if(tag == null)throw new IllegalArgumentException("Null tag");
-        try{return ((Tags)tagStorage.get(tag)).add(this, valueName, value);
+        try{return ((Tags)tagStorage.get(tag)).add(valueName, value);
         }catch (NullPointerException e){throw new NullPointerException("Tag not found");}
     }
     public void setValue(Object tag, int hash, Object value){
@@ -283,10 +277,12 @@ public class VrenMap {
     }
     public String getReport(){
         StringBuilder sb = new StringBuilder();
-        for(int i = 0; i < Title.size(); i++){
-            sb.append(Title.get(i)).append(System.lineSeparator());
-        }
         List<Map.Entry<Object, Object>> entries = new ArrayList<>(tagStorage.entrySet());
+        if(!tagStorage.isEmpty()){
+            for(int o = 0; o < Title.size(); o++){
+                sb.append(Title.get(o)).append(System.lineSeparator());
+            }
+        }else return null;
         for(int i = 0; i < tagStorage.size(); i++) {
             Map.Entry<Object, Object> entry = entries.get(i);
             Object currentKey = entry.getKey();
@@ -298,7 +294,13 @@ public class VrenMap {
         return tagStorage.size();
     }
     public int totalSize(){
-        return lengthTotal;
+        int total = 0;
+        List<Map.Entry<Object, Object>> entries = new ArrayList<>(tagStorage.entrySet());
+        for(int i = 0; i < tagStorage.size(); i++){
+            Map.Entry<Object, Object> entry = entries.get(i);
+            total += ((Tags)entry.getValue()).Value.size();
+        }
+        return total;
     }
     public int tagSize(Object tag){
         return ((Tags)tagStorage.get(tag)).Value.size();
@@ -322,7 +324,7 @@ public class VrenMap {
         int temp = 0;
         if(this.settings[INCLUDE_SETTINGS_IN_HASHCODE])temp += Arrays.hashCode(this.settings);
         if(this.settings[INCLUDE_PLUGINS_IN_HASHCODE]) temp += plugin.hashCode();
-        return Objects.hash(tagStorage, temp, lengthTotal);
+        return Objects.hash(tagStorage, temp, this.totalSize());
     }
     //return null;
     @Override
