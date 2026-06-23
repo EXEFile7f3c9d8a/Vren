@@ -69,7 +69,7 @@ if u got any ideas TELL MEEEA
 # Tips
 If you have any question drop it in Issues(everyone knows btw
 
-If you want to learn more about this go this link <a href = "https://exefile7f3c9d8a.github.io/Vren">
+If you want to learn more about this go this <a href = "https://exefile7f3c9d8a.github.io/Vren">link</a>
 
 # BTW
 uhhhhhh this project will take SOOO long to actually finish or release that uhh.... its going be more than.. a year, ill say that

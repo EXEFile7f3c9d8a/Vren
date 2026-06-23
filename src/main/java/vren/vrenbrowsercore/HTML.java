@@ -1,6 +1,6 @@
 package vren.vrenbrowsercore;
 
-import vren.vrenbrowsercore.storage.Elements;
+import vren.vrenbrowsercore.storage.*;
 
 import java.util.*;
 
@@ -10,75 +10,141 @@ public class HTML {
     private final String html;
     private final Deque<Elements> stack = new ArrayDeque<>();
     private final Elements tree = new Elements();
-
     public HTML(String html){
         this.html = html;
     }
-    public HTML Solve() {
-        byte status = NONE;
-        char temp;
-        Deque<Elements> elementStacks = new ArrayDeque<>();
-        Elements tempElement = new Elements();
-        StringBuilder currentText = new StringBuilder();
-        StringBuilder currentCode = new StringBuilder();
+    private static final class WorkTab{
+        public byte status = NONE;
+        public char temp;
+        public Deque<Elements> elementStacks = new ArrayDeque<>();
+        public Elements tempElement = new Elements();
+        public StringBuilder currentText = new StringBuilder();
+        public StringBuilder currentCode = new StringBuilder();
+        public StringBuilder currentCodeValues = new StringBuilder();
+    }
+    public HTML Solve(){
+        WorkTab t = new WorkTab();
         mainLoop:
         for(int i = 0; i < html.length(); i++){
-            temp = html.charAt(i);
-            switch(status){
+            t.temp = html.charAt(i);
+            switch(t.status){
                 case NONE:{
-                    switch (temp){
+                    switch (t.temp){
                         case '<':{
-                            status = IS_CODE_UNSURE;
-                            continue mainLoop;
-                        }
-                        default:{
-
+                            t.status = IS_CODE_UNSURE;
                             break;
                         }
+                        case ' ', '\n':{
+                            break;
+                        }
+                        default:{
+                            t.status = ILLEGAL;
+                            throw new RuntimeException("Illegal HTML");
+                        }
                     }
-                    break;
+                    continue mainLoop;
                 }
                 case IS_CODE_UNSURE:{
-                    switch(temp){
+                    switch(t.temp){
                         case '!':{
-                            status = IS_CODE_SPECIAL;
-                            continue mainLoop;
+                            t.status = IS_CODE_SPECIAL;
+                            break;
+                        }
+                        case '/':{
+                            t.status = IS_CODE_ENDING;
+                            break;
+                        }
+                        case ' ', '\n':{
+                            break;
                         }
                         default:{
-                            status = IS_CODE;
-                            currentCode.append(temp);
+                            t.status = IS_CODE;
+                            t.currentCode.append(t.temp);
                             break;
                         }
                     }
-                    break;
+                    continue mainLoop;
                 }
                 case IS_CODE:{
-                    switch(temp){
+                    switch(t.temp){
                         case '>':{
-                            if(currentCode.isEmpty()){
-                                status = NONE;
-                                break;
-                            }
-                            tempElement.setType(currentCode.toString());
-                            currentCode.setLength(0);
-                            elementStacks.add(tempElement);
+                            t.status = IS_TEXT;
+                            _isCode_emptyCodeCheck(t);
+                            t.tempElement.setType(t.currentCode.toString());
+                            t.currentCode.setLength(0);
+                            t.elementStacks.add(t.tempElement);
+                            break;
+                        }
+                        case ' ':{
+                            if(t.currentCode.isEmpty())break;
+                            t.status = IS_CODE_VALUE;
+                            t.tempElement.setType(t.currentCode.toString());
+                            break;
+                        }
+                        case '\n':{
                             break;
                         }
                         default:{
-                            currentCode.append(temp);
+                            t.currentCode.append(t.temp);
                             break;
                         }
                     }
-                    break;
+                    continue mainLoop;
                 }
                 case IS_CODE_SPECIAL:{
-                    if(currentCode.toString().equals("--")){
-                        status = IS_CODE_SPECIAL_NOTE;
+                    if(t.currentCode.toString().equals("--")){
+                        t.status = IS_CODE_SPECIAL_NOTE;
                         break;
-                    }else{
-                        currentCode.append(temp);
                     }
-                    break;
+                    switch(t.temp){
+                        case '>':{
+                            _isCode_emptyCodeCheck(t);
+                            t.status = NONE;
+                            t.tempElement.setSpecial(true);
+                            t.tempElement.setType(t.currentCode.toString());
+                            t.currentCode.setLength(0);
+                            this.tree.putChild(t.tempElement);
+                            t.tempElement = new Elements();
+                            break;
+                        }
+                        case ' ':{
+                            t.status = IS_CODE_SPECIAL_VALUE;
+                            break;
+                        }
+                        case '\n':{
+                            break;
+                        }
+                        default:{
+                            t.currentCode.append(t.temp);
+                            break;
+                        }
+                    }
+                    continue mainLoop;
+                }
+                case IS_CODE_ENDING:{
+                    switch(t.temp){
+                        case '>':{
+                            _isCode_emptyCodeCheck(t);
+                            _isCode_compareELEName(t);
+                            
+                            break;
+                        }
+                    }
+                    continue mainLoop;
+                }
+                case IS_TEXT:{
+                    switch(t.temp){
+                        case '<':{
+                            t.elementStacks.element().setText(t.currentText.toString());
+                            t.currentText.setLength(0);
+                            break;
+                        }
+                        default:{
+                            t.currentText.append(t.temp);
+                            break;
+                        }
+                    }
+                    continue mainLoop;
                 }
                 default:{
                     throw new RuntimeException("looks like ma code have bug manm");
@@ -86,5 +152,20 @@ public class HTML {
             }
         }
         return this;
+    }
+    private void _isText_end(WorkTab t){
+        t.elementStacks.element().setText(t.currentText.toString());
+    }
+    private void _isCode_emptyCodeCheck(WorkTab t){
+        if(t.currentCode.isEmpty()){
+            t.status = ILLEGAL;
+            throw new RuntimeException("Illegal HTML: EMPTY_CODE_FEILD");
+        }
+    }
+    private void _isCode_compareELEName(WorkTab t){
+        if(!(Objects.equals(t.elementStacks.element().getType(), t.currentCode.toString()))){
+            t.status = ILLEGAL;
+            throw new RuntimeException("Illegal HTML: ELEMENT_NAME_NOT_MATCH");
+        }
     }
 }

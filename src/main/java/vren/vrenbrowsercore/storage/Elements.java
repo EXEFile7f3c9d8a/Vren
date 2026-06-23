@@ -1,9 +1,9 @@
 package vren.vrenbrowsercore.storage;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 public class Elements{
+    private boolean isSpecial = false;
     private String type;
     private String href;
     private String rel;
@@ -132,6 +132,15 @@ public class Elements{
 
     public Elements setText(String text) {
         this.text = text;
+        return this;
+    }
+
+    public boolean isSpecial(){
+        return isSpecial;
+    }
+
+    public Elements setSpecial(boolean special){
+        isSpecial = special;
         return this;
     }
 }
