@@ -4,6 +4,7 @@ import java.util.*;
 
 public class Elements{
     private boolean isSpecial = false;
+    private boolean isClosed = false;
     private String type;
     private String href;
     private String rel;
@@ -141,6 +142,15 @@ public class Elements{
 
     public Elements setSpecial(boolean special){
         isSpecial = special;
+        return this;
+    }
+
+    public boolean isClosed(){
+        return isClosed;
+    }
+
+    public Elements setClosed(boolean closed){
+        isClosed = closed;
         return this;
     }
 }

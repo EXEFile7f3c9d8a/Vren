@@ -2,6 +2,7 @@ package vren.vrenbrowsercore.storage;
 
 public interface Types{
     byte ILLEGAL = -127;
+    byte STARTED = -2;
     byte NONE = -1;
     byte IS_CODE = 0;
     byte IS_TEXT = 1;

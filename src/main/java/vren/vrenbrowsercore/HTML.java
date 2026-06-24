@@ -17,6 +17,7 @@ public class HTML {
         public byte status = NONE;
         public char temp;
         public Deque<Elements> elementStacks = new ArrayDeque<>();
+        public Elements elementStore = new Elements();
         public Elements tempElement = new Elements();
         public StringBuilder currentText = new StringBuilder();
         public StringBuilder currentCode = new StringBuilder();
@@ -68,11 +69,17 @@ public class HTML {
                 case IS_CODE:{
                     switch(t.temp){
                         case '>':{
-                            t.status = IS_TEXT;
                             _isCode_emptyCodeCheck(t);
-                            t.tempElement.setType(t.currentCode.toString());
+                            if(t.currentCode.toString().equals("br")){
+                                t.status = NONE;
+                                t.tempElement.setType(t.currentCode.toString());
+                                tree.putChild(t.tempElement);
+                            }else{
+                                t.status = IS_TEXT;
+                                t.tempElement.setType(t.currentCode.toString());
+                                t.elementStacks.add(t.tempElement);
+                            }
                             t.currentCode.setLength(0);
-                            t.elementStacks.add(t.tempElement);
                             break;
                         }
                         case ' ':{
