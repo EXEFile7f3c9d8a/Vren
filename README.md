@@ -7,12 +7,14 @@ Vren is ready to be a software that's free-opensource-fast-light-replacement for
 </p>
 
 # What's going on?
-So i am planed to make a browser core soon but however i am still working on the replacement for map.
+So i am making a browser core but it seems like just "no u can't" "how hard is it" no i got time to waste and if i really do make it, idk im lucky:P
+
+i dont think i can cuz only me is working on this and i am a kid manm.
 
 # Vren Map
 Here is how you use the VrenMap.
 
-THANKS <a href = "https://jitpack.io">jitpack</a> that i finally can let yall use it!
+THANKS <a href = "https://jitpack.io">Jitpack</a>/<a href = "https://github.com/jitpack/jitpack.io">Github</a> that i finally can let yall use it!
 
 ### WARN:
 These snapshots contain the whole-newest thing!! it includes the extra website files, useless code and even bugs! 
@@ -60,27 +62,25 @@ If you are maven add these to pom.xml
 ```
 
 # Direction
-Make a format that can store millions of data with any type of variable
-
-Might have multiple branches like Office, Anti Virus, and Browser in the future but not now(DONT even THINK about it for now, having big dreams is not that.. bad?)
-
-if u got any ideas TELL MEEEA
+i am woking on the browser right now cuz VrenMap is mostly done.
 
 # Tips
 If you have any question drop it in Issues(everyone knows btw
 
-If you want to learn more about this go this <a href = "https://exefile7f3c9d8a.github.io/Vren">link</a>
+If you want to learn more about this go this <a href = "https://vren.pages.dev/">link</a>
 
-# BTW
-uhhhhhh this project will take SOOO long to actually finish or release that uhh.... its going be more than.. a year, ill say that
+# things to say
+This browser will take SOOO long to actually finish or release that uhh.... its going be more than.. a year, ill say that, hope being soon but.. hope
 
-This name is by AI bru bcs im trash at giving things a name
+This name is by AI bruh cus im trash at giving things a name
 
-why GitHub even need to auto push a action EVERYTIME when i push a new update which i will do it EVERY 5 MIN
+the vren.pages.dev is on Cloudflare and it has its tracking thing so if u see block by uBlock Origin i swear i didnt put anything and i cant close it. idk how.
 
 # About me
 A kid :( , 13, knows some of Java, trying to learn cpp.
 
-If you have any better piece of code for performance tell me    bcs uhhhhh idk im not Albert Einstein dude.
+If you have any better piece of code for performance tell me.. bcs uhhhhh idk im not Einstein
+
+Email: <a href = "mailto:exefile.7f3c9d8a@gmail.com">exefile.7f3c9d8a@gmail.com</a>
 
 English is not my first language lol
