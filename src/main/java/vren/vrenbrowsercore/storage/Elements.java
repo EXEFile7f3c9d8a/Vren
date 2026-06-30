@@ -23,12 +23,29 @@ public class Elements{
     @Override
     public String toString(){
         StringBuilder sb = new StringBuilder();
-        sb.append("<").append(type).append(",").append(href).append(",");
+        sb.append('<').append(type).append('>');
         for(int i = 0; i < childs.size(); i++){
             sb.append(childs.get(i).toString());
         }
-        sb.append(">");
+        sb.append("</").append(type).append('>');
         return sb.toString();
+    }
+    public Elements set(String type, String msg){
+        return switch(type){
+            case "type"    -> setType(msg);
+            case "href"    -> setHref(msg);
+            case "rel"     -> setRel(msg);
+            case "src"     -> setClazz(msg);
+            case "id"      -> setId(msg);
+            case "target"  -> setTitle(msg);
+            case "charset" -> setCharset(msg);
+            case "lang"    -> setLang(msg);
+            case "text"    -> setText(msg);
+            default -> this;
+        };
+    }
+    public Elements set(String type, boolean bool){
+        return this;
     }
     public Elements setHref(String href){
         this.href = href;

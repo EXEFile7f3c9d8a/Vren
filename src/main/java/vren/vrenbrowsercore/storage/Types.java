@@ -1,5 +1,7 @@
 package vren.vrenbrowsercore.storage;
 
+import java.util.HashMap;
+
 public interface Types{
     byte ILLEGAL = -127;
     byte STARTED = -2;
@@ -13,10 +15,72 @@ public interface Types{
     byte IS_CODE_UNSURE = 6;
     byte IS_CODE_SPECIAL_NOTE = 7;
     byte IS_CODE_SPECIAL_VALUE = 8;
-    byte[] CODE_STATUS = new byte[]{
-            '<',
-            '/',
-            '>',
-            '!',
-    };
+    byte IS_CODE_UNKNOW_NEW_OR_END = 9;
+    byte IS_CODE_VALUE_STANDARD = 10;
+    byte IS_CODE_VALUE_NO_QUOTATION = 11;
+    byte IS_CODE_VALUE_UNKNOW_STANDARD_OR_NOT = 12;
+
+    HashMap<String, Character> TEXT_SPECIALS = put();
+    static HashMap<String, Character> put(){
+        HashMap<String, Character> t = new HashMap<>();
+        t.put("lt", '<');
+        t.put("gt", '>');
+        t.put("amp", '&');
+        t.put("quot", '"');
+        t.put("apos", '\'');
+        t.put("nbsp", ' ');
+        t.put("cent", '¢');
+        t.put("pound", '£');
+        t.put("yen", '¥');
+        t.put("euro", '€');
+        t.put("copy", '©');
+        t.put("reg", '®');
+        t.put("trade", '™');
+        t.put("times", '×');
+        t.put("divide", '÷');
+        t.put("plusmn", '±');
+        t.put("ne", '≠');
+        t.put("le", '≤');
+        t.put("ge", '≥');
+        t.put("minus", '−');
+        t.put("radic", '√');
+        t.put("infin", '∞');
+        t.put("int", '∫');
+        t.put("part", '∂');
+        t.put("deg", '°');
+        t.put("forall", '∀');
+        t.put("exist", '∃');
+        t.put("isin", '∈');
+        t.put("notin", '∉');
+        t.put("sub", '⊂');
+        t.put("sup", '⊃');
+        t.put("nsub", '⊄');
+        t.put("cap", '∩');
+        t.put("cup", '∪');
+        t.put("and", '∧');
+        t.put("or", '∨');
+        t.put("alpha", 'α');
+        t.put("beta", 'β');
+        t.put("gamma", 'γ');
+        t.put("delta", 'δ');
+        t.put("theta", 'θ');
+        t.put("lambda", 'λ');
+        t.put("mu", 'μ');
+        t.put("pi", 'π');
+        t.put("sigma", 'σ');
+        t.put("omega", 'ω');
+        t.put("Delta", 'Δ');
+        t.put("Sigma", 'Σ');
+        t.put("Omega", 'Ω');
+        t.put("larr", '←');
+        t.put("uarr", '↑');
+        t.put("rarr", '→');
+        t.put("darr", '↓');
+        t.put("harr", '↔');
+        t.put("crarr", '↵');
+        t.put("bull", '•');
+        t.put("para", '¶');
+        t.put("sect", '§');
+        return t;
+    }
 }

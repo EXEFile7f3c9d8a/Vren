@@ -157,7 +157,7 @@ public class VrenMap {
     public void enable(VrenMapSettings set){
         byte temp = set.getValue();
         if(temp < SETTINGS_COUNT) settings[temp] = true;
-        if(plugin.get(VrenMap.SETTING_ACTIVE_RUNNABLE_PLUGIN).size() > temp) plugin.get(VrenMap.SETTING_ACTIVE_RUNNABLE_PLUGIN).get(temp).run();
+        if(plugin.get(VrenMap.SETTING_ACTIVE_RUNNABLE_PLUGIN).size() > temp)plugin.get(VrenMap.SETTING_ACTIVE_RUNNABLE_PLUGIN).get(temp).run();
     }
     public void disable(VrenMapSettings set){
         byte temp = set.getValue();
@@ -285,8 +285,7 @@ public class VrenMap {
         int total = 0;
         List<Map.Entry<Object, Tags>> entries = new ArrayList<>(tagStorage.entrySet());
         for(int i = 0; i < tagStorage.size(); i++){
-            Map.Entry<Object, Tags> entry = entries.get(i);
-            total += entry.getValue().Value.size();
+            total += entries.get(i).getValue().Value.size();
         }
         return total;
     }
@@ -295,6 +294,7 @@ public class VrenMap {
     }
     @Override
     public String toString(){
+        if(this.tagStorage.isEmpty())return null;
         StringBuilder sb = new StringBuilder();
         List<Map.Entry<Object, Tags>> entries = new ArrayList<>(tagStorage.entrySet());
         sb.append("{");
@@ -322,6 +322,6 @@ public class VrenMap {
         if(!vm.getClass().getName().equals(this.getClass().getName()))return false;
         if(this.settings[COMPARE_SETTINGS_IN_EQUALS]&&!Arrays.equals(((VrenMap)vm).settings, this.settings))return false;
         if(this.settings[COMPARE_PLUGINS_IN_EQUALS]&&((VrenMap)vm).plugin != this.plugin)return false;
-        return Objects.equals(((VrenMap) vm).tagStorage, this.tagStorage);
+        return Objects.equals(((VrenMap)vm).tagStorage, this.tagStorage);
     }
 }
