@@ -1,7 +1,6 @@
 package vren.debug.vrenbrowsercore;
 
-public class debug {
+public class UIDebug{
     public static void main(String[] args){
-
     }
 }

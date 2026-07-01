@@ -19,6 +19,7 @@ public interface Types{
     byte IS_CODE_VALUE_STANDARD = 10;
     byte IS_CODE_VALUE_NO_QUOTATION = 11;
     byte IS_CODE_VALUE_UNKNOW_STANDARD_OR_NOT = 12;
+    byte IS_PLAIN_TEXT = 13;
 
     HashMap<String, Character> TEXT_SPECIALS = put();
     static HashMap<String, Character> put(){

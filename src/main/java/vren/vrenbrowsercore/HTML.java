@@ -136,6 +136,7 @@ public class HTML {
                             break;
                         }
                     }
+                    break;
                 }
                 case IS_CODE_VALUE_STANDARD:{
                     switch(t.temp){
@@ -146,6 +147,7 @@ public class HTML {
                         }
                         default:{
                             t.currentCodeValues.append(t.temp);
+                            break;
                         }
                     }
                     break;
@@ -268,8 +270,12 @@ public class HTML {
     public Elements getTree(){
         return this.tree;
     }
-    private void _Code_emptyCodeCheck(WorkTab t){if(t.currentCode.isEmpty())throw new RuntimeException("Illegal HTML: EMPTY_CODE_FEILD");}
-    private void _Code_emptyCodeValueCheck(WorkTab t){if(t.currentCodeValues.isEmpty())throw new RuntimeException("Illegal HTML: EMPTY_CODE_FEILD");}
+    private void _Code_emptyCodeCheck(WorkTab t){
+        if(t.currentCode.isEmpty())throw new RuntimeException("Illegal HTML: EMPTY_CODE_FEILD");
+    }
+    private void _Code_emptyCodeValueCheck(WorkTab t){
+        if(t.currentCodeValues.isEmpty())throw new RuntimeException("Illegal HTML: EMPTY_CODE_FEILD");
+    }
     private void _Code_compareELEName(WorkTab t){
         if(!(Objects.equals(t.elementStacks.element().getType(), t.currentCode.toString())))throw new RuntimeException("Illegal HTML: ELEMENT_NAME_NOT_MATCH");
     }
