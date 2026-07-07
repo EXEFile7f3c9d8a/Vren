@@ -29,8 +29,6 @@ public class VrenMap {
     public static final byte PLUGIN_COUNT = 1;
 //    Structure/Format: plugin<settings active plugin<plugins<plugin, pluginEX>>,...
     private final List<List<plugins>> plugin = new ArrayList<>();
-
-
     private final HashMap<Object, Tags> tagStorage = new HashMap<>();
     private static final class Values{
         public Object value;

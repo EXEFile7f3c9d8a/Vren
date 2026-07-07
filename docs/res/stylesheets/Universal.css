@@ -1,14 +1,7 @@
-
 body{
-    font-family: "Google-Sans", sans-serif;
+    font-family: "Segoe-UI", sans-serif;
     font-variation-settings:"GRAD" 0;
-    background-color: #f8f9fa;
-}
-#home{
-    margin-left: 5px;
-    margin-top: 5px;
-    width: 50px;
-    height: auto;
+    background-color: #ffffff;
 }
 .main{
     display: flex;

@@ -4,25 +4,18 @@
 <head>
     <meta charset="UTF-8">
     <title>Vren Map docs</title>
-    <link rel="image/png" href="../../res/image/title/UniversalTitleImage.png">
-    <link rel = "stylesheet" href = "../../res/stylesheets/Universal.css">
-    <link rel = "stylesheet" href = "../../res/stylesheets/topBars.css">
-    <link rel = "stylesheet" href = "../../res/stylesheets/Fonts.css">
+    <link rel="image/png" href="../../../../../res/image/title/UniversalTitleImage.png">
+    <link rel = "stylesheet" href = "../../../../../res/stylesheets/Universal.css">
+    <link rel = "stylesheet" href = "../../../../../res/stylesheets/topBars.css">
+    <link rel = "stylesheet" href = "../../../../../res/stylesheets/Fonts.css">
     <link rel = "stylesheet" href = "VrenMapDoc.css">
-    <link rel="icon" type="image/png" href="../../res/image/title/UniversalTitleImage.png">
+    <link rel="icon" type="image/png" href="../../../../../res/image/title/UniversalTitleImage.png">
 <!--    <script src = "VrenMapDoc.js" defer></script>-->
 </head>
 <body>
-
-<header class = "topBars">
-    <nav>
-        <a href="../../index.html" target="_self" title = "Home page">
-            <img id = "home" src = "../../res/image/title/UniversalTitleImage.png" alt = "img">
-        </a>
-
-    </nav>
+<header id = "topBar">
+    <script src = "../../../../../res/scripts/topbar.js" type = "module"></script>
 </header>
-
 <div class = "main">
     <div class = "docs">
         <div class = "paragraphs">
@@ -31,8 +24,11 @@
         <table id = "docsTable">
             <tr id = "FirstLine" class = "docTableLines">
             </tr>
-            <script src = "Table.js" defer></script>
+            <script src = "table.js" type="module"></script>
         </table>
+        <div id = "deploy" style = "white-space: pre-wrap">
+            <script src = deploy.js type="module"></script>
+        </div>
         <p>I will refactor it in the future, maybe tomorrow or tonight, i will refactor the whole thing by TS, JS is annoying bro</p>
         <p title = "EASTER EGG!">Uhhhh idk thanks for looking at this, i will add more information to it dont worry!</p>
         <br>

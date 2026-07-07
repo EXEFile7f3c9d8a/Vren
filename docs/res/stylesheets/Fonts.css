@@ -6,3 +6,7 @@
     font-family: "Google-Sans";
     src: url('../fonts/GoogleSans-VariableFont_GRAD,opsz,wght.ttf') format('truetype');
 }
+@font-face {
+    font-family: "Segoe-UI";
+    src: url("../fonts/SegoeUI/segoeui.ttf") format('truetype');
+}

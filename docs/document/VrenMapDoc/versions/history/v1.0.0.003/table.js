@@ -1,26 +1,3 @@
-
-let classes = [
-    "Functions",
-    "HasOutput",
-    "OutputFormat",
-    "OutputType",
-    "HasInput",
-    "InputFormat",
-    "InputType",
-    "FunctionCalls",
-    "Info"
-];
-let firstLine = [
-    "Functions",
-    "Has output?",
-    "Format of output",
-    "Output class type",
-    "Has input?",
-    "Format of input",
-    "Input class type",
-    "Function it calls",
-    "More info"
-];
 let VrenMap = [
     "VrenMap()",
     "No", "No output", "No output",
@@ -203,62 +180,18 @@ let functions = [
     getValueOf0, getValueOf1, getValueOf2, setValue0, setValue1, setValue2, getTag, getTagReport,
     getReport, size, totalSize, tagSize, toString, hashCode
 ];
-
-const table = document.getElementById("docsTable");
-const firstL = document.getElementById("FirstLine");
-
-const uniHeight = "30px";
-const uniColor = "#e0e0e0";
-const tableWid = 1866;
-
-table.style.width =  "1866px";
-table.style.tableLayout =  "fixed";
-table.style.overflowWrap =  "break-word";
-
-
-let information = [
-    [0, "135px", uniHeight, "Functions"],
-    [1, "120.6px", uniHeight, "Has output?"],
-    [2, "164px", uniHeight, "Format of output"],
-    [3, "164px", uniHeight, "Output class type"],
-    [4, "120.6px", uniHeight, "Has input?"],
-    [5, "164px", uniHeight, "Format of input"],
-    [6, "164px", uniHeight, "Input class type"],
-    [7, "150.5px", uniHeight, "Function it calls"],
-    [8, "583.5px", uniHeight, "More info"]
+let firstLine = [
+    "Functions",
+    "Has output?",
+    "Format of output",
+    "Output class type",
+    "Has input?",
+    "Format of input",
+    "Input class type",
+    "Function it calls",
+    "More info"
 ];
-
-
-{
-    let subTd = document.createElement("td");
-    for(let i = 0; i < firstLine.length; i++){
-        subTd = document.createElement("td");
-        subTd.className = firstL.className;
-        subTd.className = classes[i];
-        subTd.textContent = firstLine[i];
-
-        subTd.style.height = "40px";
-        subTd.style.width = (information[i])[1];
-        subTd.style.backgroundColor = "#c9c9c9";
-        firstL.appendChild(subTd);
-    }
-}
-{
-    let tabTr = document.createElement("tr");
-    tabTr.className = "Lines";
-    let subTd = document.createElement("td");
-    for(let i = 0; i < functions.length; i++){
-        tabTr = document.createElement("tr");
-        for(let o = 0; o < functions[i].length; o++){
-            subTd = document.createElement("td");
-            subTd.className = classes[o];
-            subTd.textContent = (functions[i])[o];
-
-            subTd.style.height = uniHeight;
-            subTd.style.width = (information[o])[1];
-            subTd.style.backgroundColor = uniColor;
-            tabTr.appendChild(subTd);
-        }
-        table.appendChild(tabTr);
-    }
-}
+import {run}from '../../../../../res/scripts/table.js'
+import {putFunctions}from '../../../../../res/scripts/table.js'
+putFunctions(functions, document, firstLine);
+run();

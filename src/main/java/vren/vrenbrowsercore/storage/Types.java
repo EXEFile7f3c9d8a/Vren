@@ -3,7 +3,7 @@ package vren.vrenbrowsercore.storage;
 import java.util.HashMap;
 
 public interface Types{
-    byte ILLEGAL = -127;
+    byte ILLEGAL = -128;
     byte STARTED = -2;
     byte NONE = -1;
     byte IS_CODE = 0;

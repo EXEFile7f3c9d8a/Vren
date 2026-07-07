@@ -1,0 +1,46 @@
+#title{
+    font-size: xx-large;
+    font-weight: bolder;
+}
+/*
+#version-title, #deploy-title{
+    font-size: x-large;
+    font-weight: bold;
+}
+#Gradle-box-p, #Maven-box-p{
+    background-color: #f6f8fa;
+    border-radius: 5px 5px 0 0;
+    border-bottom: 1px solid #d1d9e0;
+    height: 30px;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+}
+#Gradle-box, #Maven-box{
+    width: 700px;
+    border-radius: 5px;
+    border: 1px solid #d1d9e0;
+}
+#boxes{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+#deploy{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+#Gradle-box-code, #Maven-box-code{
+    margin-left: 15px;
+}
+#Gradle-box-code-1, #Gradle-box-code-2, #Maven-box-code-1, #Maven-box-code-2{
+    text-align: left;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    flex-direction: column;
+}
+*/
