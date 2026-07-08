@@ -21,8 +21,29 @@ public interface Types{
     byte IS_CODE_VALUE_UNKNOW_STANDARD_OR_NOT = 12;
     byte IS_PLAIN_TEXT = 13;
 
-    HashMap<String, Character> TEXT_SPECIALS = put();
-    static HashMap<String, Character> put(){
+    HashMap<String, Character> TEXT_SPECIALS = TEXT_SPECIALS();
+
+    HashMap<String, Boolean> NO_CLOSING_ELEMENT = NO_CLOSING_ELEMENT();
+    static HashMap<String, Boolean> NO_CLOSING_ELEMENT(){
+        HashMap<String, Boolean> t = new HashMap<>();
+        t.put("area", true);
+        t.put("base", true);
+        t.put("br", true);
+        t.put("col", true);
+        t.put("embed", true);
+        t.put("hr", true);
+        t.put("img", true);
+        t.put("input", true);
+        t.put("link", true);
+        t.put("meta", true);
+        t.put("param", true);
+        t.put("source", true);
+        t.put("track", true);
+        t.put("wbr", true);
+        return t;
+    }
+
+    static HashMap<String, Character> TEXT_SPECIALS(){
         HashMap<String, Character> t = new HashMap<>();
         t.put("lt", '<');
         t.put("gt", '>');

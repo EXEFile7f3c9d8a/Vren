@@ -69,18 +69,7 @@ public class HTML {
                 case IS_CODE:{
                     switch(t.temp){
                         case '>':{
-                            _Code_emptyCodeCheck(t);
-                            if(t.currentCode.toString().equals("br")){
-                                t.status = NONE;
-                                t.tempElement.setType(t.currentCode.toString());
-                                tree.putChild(t.tempElement);
-                            }else{
-                                t.status = IS_TEXT;
-                                t.tempElement.setType(t.currentCode.toString());
-                                t.elementStacks.add(t.tempElement);
-                            }
-                            t.currentCode.setLength(0);
-                            break;
+                            _Code_close(t);
                         }
                         case ' ':{
                             if(t.currentCode.isEmpty())break;
@@ -112,6 +101,9 @@ public class HTML {
                             t.currentCodeValues.setLength(0);
                             break;
                         }
+                        case '>':{
+
+                        }
                         default:{
                             t.currentCodeValues.append(t.temp);
                             break;
@@ -133,6 +125,7 @@ public class HTML {
                         }
                         default:{
                             t.status = IS_CODE_VALUE_NO_QUOTATION;
+                            t.currentCodeValues.append(t.temp);
                             break;
                         }
                     }
@@ -142,7 +135,11 @@ public class HTML {
                     switch(t.temp){
                         case '"':{
                             _Code_emptyCodeValueCheck(t);
+                            if(Types.NO_CLOSING_ELEMENT().get(t.tempElement.get("type")) != null){
+                                _Code_addValueToElement(t);
+                            }else{
 
+                            }
                             break;
                         }
                         default:{
@@ -292,5 +289,33 @@ public class HTML {
             if(!((temp >= 'a' && temp <= 'z')||(temp >= 'A' && temp <= 'Z')))return false;
         }
         return true;
+    }
+    private void _Code_close(WorkTab t){
+        _Code_emptyCodeCheck(t);
+        if(Types.NO_CLOSING_ELEMENT().get(t.currentCode.toString()) != null){
+            t.status = NONE;
+            t.tempElement.setType(t.currentCode.toString());
+            t.elementStacks.element().putChild(t.tempElement);
+        }else{
+            t.status = IS_TEXT;
+            t.tempElement.setType(t.currentCode.toString());
+            t.elementStacks.add(t.tempElement);
+        }
+        t.currentCode.setLength(0);
+    }
+    private void _Code_addValueToElement(WorkTab t){
+        t.elementStacks.element().set(t.tempValueType, t.currentCodeValues.toString());
+        t.tempElement = new Elements();
+        t.currentCodeValues.setLength(0);
+        t.status = IS_CODE_VALUE;
+    }
+    private void _Code_closeElementNoClosingStatement(WorkTab t){
+        t.status = IS_CODE_VALUE;
+        t.tempElement.setType(t.currentCode.toString());
+        t.tempElement.set(t.tempValueType, t.currentCodeValues.toString());
+        t.elementStacks.element().putChild(t.tempElement);
+        t.tempElement = new Elements();
+        t.tempValueType = null;
+        _Code_resetSB(t);
     }
 }

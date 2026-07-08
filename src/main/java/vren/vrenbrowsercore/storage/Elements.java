@@ -5,167 +5,168 @@ import java.util.*;
 public class Elements{
     private boolean isSpecial = false;
     private boolean isClosed = false;
-    private String type;
-    private String href;
-    private String rel;
-    private String src;
-    private String clazz;
-    private String id;
-    private String target;
-    private String title;
-    private String charset;
-    private String lang;
+    private final Map<String, String> attitudes = new HashMap<>();
 
-    private String text;
-
-    private final List<Elements> childs = new ArrayList<>();
-    public Elements(){}
+    private final List<Elements> children = new ArrayList<>();
+    public Elements(){
+        attitudes.put("type"   , "");
+        attitudes.put("href"   , "");
+        attitudes.put("rel"    , "");
+        attitudes.put("src"    , "");
+        attitudes.put("clazz"  , "");
+        attitudes.put("id"     , "");
+        attitudes.put("target" , "");
+        attitudes.put("title"  , "");
+        attitudes.put("charset", "");
+        attitudes.put("lang"   , "");
+        attitudes.put("text"   , "");
+    }
     @Override
     public String toString(){
         StringBuilder sb = new StringBuilder();
-        sb.append('<').append(type).append('>');
-        for(int i = 0; i < childs.size(); i++){
-            sb.append(childs.get(i).toString());
+        sb.append('<').append(attitudes.get("type")).append(' ');
+        List<Map.Entry<String, String>> entries = new ArrayList<>(attitudes.entrySet());
+        for(int i = 0; i < attitudes.size(); i++){
+            Map.Entry<String, String> entry = entries.get(i);
+            String value = entry.getValue();
+            if(!Objects.equals(value, ""))sb.append(entry.getKey()).append("=\"").append(value).append("\" ");
         }
-        sb.append("</").append(type).append('>');
+        sb.replace(sb.length()-1, sb.length(), ">");
+        for(int i = 0; i < children.size(); i++){
+            sb.append(children.get(i).toString());
+        }
+        sb.append("</").append(attitudes.get("type")).append('>');
         return sb.toString();
     }
     public Elements set(String type, String msg){
+        switch(type){
+            case "type"    -> attitudes.replace("type"   , msg);
+            case "href"    -> attitudes.replace("href"   , msg);
+            case "rel"     -> attitudes.replace("rel"    , msg);
+            case "src"     -> attitudes.replace("src"    , msg);
+            case "id"      -> attitudes.replace("id"     , msg);
+            case "target"  -> attitudes.replace("target" , msg);
+            case "charset" -> attitudes.replace("charset", msg);
+            case "lang"    -> attitudes.replace("lang"   , msg);
+            case "text"    -> attitudes.replace("text"   , msg);
+        }
+        return this;
+    }
+    public String get(String type){
         return switch(type){
-            case "type"    -> setType(msg);
-            case "href"    -> setHref(msg);
-            case "rel"     -> setRel(msg);
-            case "src"     -> setClazz(msg);
-            case "id"      -> setId(msg);
-            case "target"  -> setTitle(msg);
-            case "charset" -> setCharset(msg);
-            case "lang"    -> setLang(msg);
-            case "text"    -> setText(msg);
-            default -> this;
+            case "type"    -> attitudes.get("type"   );
+            case "href"    -> attitudes.get("href"   );
+            case "rel"     -> attitudes.get("rel"    );
+            case "src"     -> attitudes.get("src"    );
+            case "id"      -> attitudes.get("id"     );
+            case "target"  -> attitudes.get("target" );
+            case "charset" -> attitudes.get("charset");
+            case "lang"    -> attitudes.get("lang"   );
+            case "text"    -> attitudes.get("text"   );
+            default -> "null";
         };
     }
     public Elements set(String type, boolean bool){
         return this;
     }
     public Elements setHref(String href){
-        this.href = href;
+        this.set("href", href);
         return this;
     }
     public String getHref(){
-        return this.href;
+        return get("href") ;
     }
     public Elements setType(String type){
-        this.type = type;
+        this.set("type", type);
         return this;
     }
     public String getType(){
-        return this.type;
+        return get("type") ;
     }
     public Elements putChild(Elements ele){
-        childs.add(ele);
+        children.add(ele);
         return this;
     }
-    public Elements putChilds(List<Elements> ele){
-        childs.addAll(ele);
+    public Elements putChildren(List<Elements> ele){
+        children.addAll(ele);
         return this;
     }
-    public List<Elements> getChilds() {
-        return childs;
+    public List<Elements> getChildren() {
+        return children;
     }
     public String getRel() {
-        return rel;
+        return get("rel");
     }
-
     public Elements setRel(String rel) {
-        this.rel = rel;
+        this.set("rel", rel);
         return this;
     }
-
     public String getSrc() {
-        return src;
+        return get("src");
     }
-
     public Elements setSrc(String src) {
-        this.src = src;
+        this.set("src", src);
         return this;
     }
-
     public String getClazz() {
-        return clazz;
+        return get("clazz");
     }
-
     public Elements setClazz(String clazz) {
-        this.clazz = clazz;
+        this.set("clazz", clazz);
         return this;
     }
-
     public String getId() {
-        return id;
+        return get("id");
     }
-
     public Elements setId(String id) {
-        this.id = id;
+        this.set("id", id);
         return this;
     }
-
     public String getTarget() {
-        return target;
+        return get("target");
     }
-
     public Elements setTarget(String target) {
-        this.target = target;
+        this.set("target", target);
         return this;
     }
-
     public String getTitle() {
-        return title;
+        return get("title");
     }
-
     public Elements setTitle(String title) {
-        this.title = title;
+        this.set("title", title);
         return this;
     }
-
     public String getCharset() {
-        return charset;
+        return get("charset");
     }
-
     public Elements setCharset(String charset) {
-        this.charset = charset;
+        this.set("charset", charset);
         return this;
     }
-
     public String getLang() {
-        return lang;
+        return get("lang");
     }
-
     public Elements setLang(String lang) {
-        this.lang = lang;
+        this.set("lang", lang);
         return this;
     }
-
     public String getText() {
-        return text;
+        return get("text");
     }
-
     public Elements setText(String text) {
-        this.text = text;
+        this.set("text", text);
         return this;
     }
-
     public boolean isSpecial(){
         return isSpecial;
     }
-
     public Elements setSpecial(boolean special){
         isSpecial = special;
         return this;
     }
-
     public boolean isClosed(){
         return isClosed;
     }
-
     public Elements setClosed(boolean closed){
         isClosed = closed;
         return this;
