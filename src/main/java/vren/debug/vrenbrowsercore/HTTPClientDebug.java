@@ -6,8 +6,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-import vren.vrenbrowsercore.HTTP;
-import vren.vrenbrowsercore.HTTP.Sink.*;
+import vren.app.vrenbrowsercore.HTTP;
 
 import java.util.*;
 

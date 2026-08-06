@@ -1,4 +1,4 @@
-package vren.vrenmap;
+package vren.app.vrenmap;
 
 public interface VrenMapSettings {
     VrenMapSettings BINARY_VALUE_IN_REPORT = () -> (byte)0;

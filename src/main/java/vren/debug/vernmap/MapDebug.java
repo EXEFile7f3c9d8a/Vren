@@ -1,8 +1,8 @@
 package vren.debug.vernmap;
 
-import vren.vrenmap.VrenMap;
-import vren.vrenmap.VrenMapPlugins;
-import vren.vrenmap.VrenMapSettings;
+import vren.app.vrenmap.VrenMap;
+import vren.app.vrenmap.VrenMapPlugins;
+import vren.app.vrenmap.VrenMapSettings;
 
 public class MapDebug {
     public static void main(String[] args) {

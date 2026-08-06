@@ -1,8 +1,6 @@
-package vren.vrenmap;
+package vren.app.vrenmap;
 
 import java.util.*;
-
-import static vren.vrendevtools.VrenDevTools.*;
 
 public class VrenMap {
     private static final List<String> Title = new ArrayList<>(); //HAHAHAHAAAAAAAAAA

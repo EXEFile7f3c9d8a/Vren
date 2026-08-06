@@ -1,4 +1,4 @@
-package vren.vrenbrowsercore.storage;
+package vren.app.vrenbrowsercore.storage;
 
 import java.util.*;
 
@@ -66,9 +66,6 @@ public class Elements{
             default -> "null";
         };
     }
-    public Elements set(String type, boolean bool){
-        return this;
-    }
     public Elements setHref(String href){
         this.set("href", href);
         return this;
@@ -85,6 +82,10 @@ public class Elements{
     }
     public Elements putChild(Elements ele){
         children.add(ele);
+        return this;
+    }
+    public Elements putChildren(Elements... ele){
+        children.addAll(List.of(ele));
         return this;
     }
     public Elements putChildren(List<Elements> ele){

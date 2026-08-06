@@ -1,11 +1,11 @@
-package vren.vrenbrowsercore;
+package vren.app.vrenbrowsercore;
 
 import java.io.*;
 import java.net.*;
 import java.net.http.*;
 import java.net.http.HttpRequest.*;
 import java.util.*;
-import vren.vrenbrowsercore.HTTP.Sink.*;
+import vren.app.vrenbrowsercore.HTTP.Sink.*;
 
 public class HTTP{
     public Sink sink = new Sink();

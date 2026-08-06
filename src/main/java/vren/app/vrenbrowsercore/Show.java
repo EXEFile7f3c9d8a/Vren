@@ -1,4 +1,4 @@
-package vren.vrenbrowsercore;
+package vren.app.vrenbrowsercore;
 
 import javafx.application.Application;
 import javafx.scene.Scene;

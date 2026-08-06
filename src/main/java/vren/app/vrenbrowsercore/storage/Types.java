@@ -1,4 +1,4 @@
-package vren.vrenbrowsercore.storage;
+package vren.app.vrenbrowsercore.storage;
 
 import java.util.HashMap;
 
@@ -42,7 +42,6 @@ public interface Types{
         t.put("wbr", true);
         return t;
     }
-
     static HashMap<String, Character> TEXT_SPECIALS(){
         HashMap<String, Character> t = new HashMap<>();
         t.put("lt", '<');

@@ -1,10 +1,12 @@
-package vren.vrenbrowsercore;
+package vren.app.vrenbrowsercore;
 
-import vren.vrenbrowsercore.storage.*;
+import vren.app.vrenbrowsercore.storage.Elements;
+import vren.app.vrenbrowsercore.storage.Types;
+import vren.app.vrenbrowsercore.storage.*;
 
 import java.util.*;
 
-import static vren.vrenbrowsercore.storage.Types.*;
+import static vren.app.vrenbrowsercore.storage.Types.*;
 
 public class HTML {
     private final String html;
@@ -94,7 +96,6 @@ public class HTML {
                             break;
                         }
                         case '=':{
-                            _Code_emptyCodeValueCheck(t);
                             _Code_elseAlphabet(t.currentCodeValues.toString());
                             t.status = IS_CODE_VALUE_UNKNOW_STANDARD_OR_NOT;
                             t.tempValueType = t.currentCodeValues.toString();
@@ -134,11 +135,10 @@ public class HTML {
                 case IS_CODE_VALUE_STANDARD:{
                     switch(t.temp){
                         case '"':{
-                            _Code_emptyCodeValueCheck(t);
                             if(Types.NO_CLOSING_ELEMENT().get(t.tempElement.get("type")) != null){
-                                _Code_addValueToElement(t);
+                                _Code_closeElementNoClosingStatement(t);
                             }else{
-
+                                _Code_addValueToElement(t);
                             }
                             break;
                         }
@@ -150,6 +150,15 @@ public class HTML {
                     break;
                 }
                 case IS_CODE_VALUE_NO_QUOTATION:{
+                    switch(t.temp){
+                        case ' ', '\n':{
+
+                        }
+                        default:{
+                            t.currentCodeValues.append(t.temp);
+                            break;
+                        }
+                    }
                     break;
                 }
                 case IS_CODE_SPECIAL:{
@@ -270,15 +279,17 @@ public class HTML {
     private void _Code_emptyCodeCheck(WorkTab t){
         if(t.currentCode.isEmpty())throw new RuntimeException("Illegal HTML: EMPTY_CODE_FEILD");
     }
-    private void _Code_emptyCodeValueCheck(WorkTab t){
-        if(t.currentCodeValues.isEmpty())throw new RuntimeException("Illegal HTML: EMPTY_CODE_FEILD");
-    }
     private void _Code_compareELEName(WorkTab t){
-        if(!(Objects.equals(t.elementStacks.element().getType(), t.currentCode.toString())))throw new RuntimeException("Illegal HTML: ELEMENT_NAME_NOT_MATCH");
+        if(!Objects.equals(
+                t.elementStacks.element().getType(),
+                t.currentCode.toString())
+        )throw new RuntimeException("Illegal HTML: ELEMENT_NAME_NOT_MATCH");
     }
     private void _Code_resetSB(WorkTab t){
         t.currentCode.setLength(0);
         t.currentCodeValues.setLength(0);
+        t.currentText.setLength(0);
+        t.currentSpecialText.setLength(0);
     }
     private void _Code_elseAlphabet(String str){
         if(!containsElseThanAlphabet(str))throw new RuntimeException("contains else than alphabet");
@@ -317,5 +328,8 @@ public class HTML {
         t.tempElement = new Elements();
         t.tempValueType = null;
         _Code_resetSB(t);
+    }
+    private void _Code_valueEnd(WorkTab t){
+
     }
 }
