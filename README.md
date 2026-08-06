@@ -77,7 +77,7 @@ This name is by AI bruh cus im trash at giving things a name
 the vren.pages.dev is on Cloudflare and it has its tracking thing so if u see block by uBlock Origin i swear i didnt put anything and i cant close it. idk how.
 
 # About me
-A kid :( , 13, knows some of Java, trying to learn cpp.
+A kid :( , 14, knows some of Java, trying to learn cpp.
 
 If you have any better piece of code for performance tell me.. bcs uhhhhh idk im not Einstein
 
